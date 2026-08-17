@@ -241,7 +241,7 @@
     </div>
     <div class="note">
       <h3>Collecting responses into a Google Sheet</h3>
-      <p>Every locked-in call saves a row — <em>time, name, turn, choice, actual move, correct?, and the typed rationale</em> — to a Google Sheet you own. Paste your Apps Script Web-app URL into <code>SHEET_ENDPOINT</code> near the top of the script (full steps are in the setup guide I sent). The indicator top-right shows <em>Saved ✓</em> / <em>Save failed ✗</em>; the <em>Export CSV</em> button on the final screen is a backup.</p>
+      <p>Responses save to a Google Sheet you own, in two tabs: <strong>Grid</strong> (one row per student, one column per turn — easy to grade at a glance) and <strong>Responses</strong> (one row per answer, keeping the full typed rationale and timestamps). Paste your Apps Script Web-app URL into <code>SHEET_ENDPOINT</code> near the top of the script (full steps in the setup guide). The indicator top-right shows <em>Saved ✓</em> / <em>Save failed ✗</em>; the <em>Export CSV</em> button on the final screen is a backup.</p>
     </div>
     <div class="note">
       <h3>A note on the numbers</h3>
@@ -250,7 +250,7 @@
     <div class="nav"><button class="primary" id="backToGame">Back to the game</button></div>
   </div>
 
-  <p class="foot">Built for Prof. Smit's Econ 476 · a self-contained classroom tool — no internet or login needed. Refresh to reset.</p>
+  <p class="foot">Built for Prof. Smit's Econ 476 · Responses are recorded in an excel sheet. Refresh to reset.</p>
 </div>
 <div class="tip" id="tip"></div>
 
@@ -620,9 +620,12 @@ function render(){
     const correct = (choice==='UP'&&mv.dir==='UP')||(choice==='DOWN'&&mv.dir==='DOWN');
     answers[cur]={choice, correct: (mv.flat||choice==='FLAT')?null:correct};
     const rationale=(mount.querySelector('#rat')?.value||'').trim();
+    const gn = TURNS.indexOf(t)+1;                       // stable global turn number 1..24 (same across part releases)
+    const choiceWord = choice==='UP'?'Buy':choice==='DOWN'?'Sell':'Flat';
+    const actualWord = mv.flat?'Flat':(mv.dir==='UP'?'Up':'Down');
     logResponse({ clientTime:new Date().toISOString(), name:player.name, session:player.session,
-      turn:t.date+' (#'+(cur+1)+')', date:t.date, choice,
-      actual: mv.flat?'flat':mv.dir, correct: mv.flat?'flat-month':(choice==='FLAT'?'flat':(correct?'yes':'no')),
+      n:gn, turn:gn, date:t.date, choice:choiceWord, actual:actualWord,
+      correct: mv.flat?'flat-month':(choice==='FLAT'?'flat':(correct?'yes':'no')),
       rationale });
     choiceBtns.forEach(b=>b.disabled=true);
     revealBtn.disabled=true; revealBtn.textContent='Revealed';
