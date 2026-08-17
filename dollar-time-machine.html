@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Dollar Time Machine — Econ 476 FX Game</title>
+<style>
+  :root{
+    color-scheme: light;
+    --page:#f9f9f7; --surface:#fcfcfb; --surface-2:#f3f2ee;
+    --ink:#0b0b0b; --ink-2:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --axis:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --series:#2a78d6; --series-soft:#cde2fb;
+    --good:#0ca30c; --good-ink:#006300; --bad:#d03b3b;
+    --accent:#eb6834;
+  }
+  html[data-theme="dark"]{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#222220;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --grid:#2c2c2a; --axis:#383835; --border:rgba(255,255,255,0.10);
+    --series:#3987e5; --series-soft:#173453;
+    --good:#0ca30c; --good-ink:#0ca30c; --bad:#e66767;
+    --accent:#d95926;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--page); color:var(--ink);
+    font-family: system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding:20px 20px 80px;}
+  header.top{display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:6px;}
+  h1{font-size:1.5rem; margin:0 0 2px; letter-spacing:-0.02em;}
+  .sub{color:var(--ink-2); font-size:.95rem; margin:0;}
+  .toolbtns{display:flex; gap:8px; flex:none;}
+  button{font-family:inherit; cursor:pointer;}
+  .ghost{
+    background:var(--surface); color:var(--ink-2); border:1px solid var(--border);
+    border-radius:8px; padding:7px 12px; font-size:.82rem; font-weight:600;
+  }
+  .ghost:hover{background:var(--surface-2); color:var(--ink);}
+  .pill{display:none; align-items:center; gap:5px; font-size:.75rem; font-weight:600;
+    padding:6px 10px; border-radius:99px; background:var(--surface-2); align-self:center;}
+  .ginput{width:100%; border:1px solid var(--border); border-radius:9px; padding:10px 12px;
+    font-family:inherit; font-size:.95rem; background:var(--surface); color:var(--ink);}
+  .ginput:focus{outline:none; border-color:var(--series); box-shadow:0 0 0 3px var(--series-soft);}
+  .signedin{font-size:.78rem; color:var(--muted);}
+
+  /* progress rail */
+  .rail{display:flex; gap:5px; margin:16px 0 4px; flex-wrap:wrap;}
+  .pip{height:6px; flex:1 1 30px; border-radius:99px; background:var(--grid);}
+  .pip.done{background:var(--series);}
+  .pip.cur{background:var(--accent);}
+  .railmeta{display:flex; justify-content:space-between; font-size:.78rem; color:var(--muted); margin-bottom:16px;}
+
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px; margin-bottom:16px; box-shadow:0 1px 2px rgba(0,0,0,.03);
+  }
+  .turnhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+  .turnhead h2{font-size:1.15rem; margin:0; letter-spacing:-.01em;}
+  .phase{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--series); background:var(--series-soft); padding:3px 9px; border-radius:99px;}
+  html[data-theme="dark"] .phase{color:#9ec5f4;}
+
+  .statrow{display:flex; gap:22px; align-items:flex-end; margin:12px 0 4px;}
+  .stat .k{font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+  .stat .v{font-size:2rem; font-weight:700; letter-spacing:-.02em; line-height:1.1;}
+  .stat .v small{font-size:.9rem; font-weight:600; color:var(--ink-2);}
+
+  .know{margin:14px 0 4px;}
+  .know h3{font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:0 0 8px;}
+  .know ul{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .know li{position:relative; padding-left:18px; font-size:.93rem; color:var(--ink);}
+  .know li::before{content:""; position:absolute; left:2px; top:.55em; width:6px; height:6px;
+    border-radius:2px; background:var(--accent);}
+
+  /* chart */
+  figure.chart{margin:8px 0 0;}
+  .chart svg{width:100%; height:auto; display:block; overflow:visible;}
+  .chart .cap{font-size:.74rem; color:var(--muted); margin-top:4px;}
+
+  /* decision */
+  .decide{margin-top:6px;}
+  .decide h3{font-size:.9rem; margin:0 0 4px;}
+  .qhint{font-size:.86rem; color:var(--ink-2); margin:0 0 12px;}
+  .choices{display:flex; gap:10px; flex-wrap:wrap;}
+  .choice{
+    flex:1 1 150px; border:1.5px solid var(--border); background:var(--surface-2);
+    border-radius:11px; padding:13px 14px; text-align:left; transition:.12s;
+  }
+  .choice .big{font-size:1rem; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .choice .desc{font-size:.78rem; color:var(--ink-2); margin-top:3px;}
+  .choice:hover{border-color:var(--series);}
+  .choice.sel{border-color:var(--series); background:var(--series-soft); box-shadow:0 0 0 3px var(--series-soft);}
+  html[data-theme="dark"] .choice.sel{background:var(--series-soft);}
+  .choice .arrow{font-size:1.1rem;}
+  .choice.up .arrow{color:var(--good);} .choice.down .arrow{color:var(--bad);} .choice.flat .arrow{color:var(--muted);}
+
+  .why{margin-top:14px;}
+  .why label{font-size:.82rem; color:var(--ink-2); font-weight:600; display:block; margin-bottom:5px;}
+  .why textarea{width:100%; min-height:52px; resize:vertical; border:1px solid var(--border);
+    border-radius:9px; padding:9px 11px; font-family:inherit; font-size:.9rem; background:var(--surface);
+    color:var(--ink);}
+  .why textarea::placeholder{color:var(--muted);}
+
+  .actions{display:flex; gap:10px; margin-top:16px; align-items:center; flex-wrap:wrap;}
+  .primary{background:var(--ink); color:var(--page); border:none; border-radius:10px;
+    padding:11px 20px; font-size:.92rem; font-weight:700;}
+  .primary:disabled{opacity:.35; cursor:not-allowed;}
+  .primary:not(:disabled):hover{background:var(--series);}
+  .scoretag{margin-left:auto; font-size:.82rem; color:var(--muted); font-variant-numeric:tabular-nums;}
+
+  /* reveal */
+  .reveal{margin-top:18px; border-top:1px dashed var(--border); padding-top:16px; display:none;}
+  .reveal.show{display:block; animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+  .verdict{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.02rem; margin-bottom:8px;}
+  .badge{display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:99px; font-size:.8rem; font-weight:700;}
+  .badge.hit{color:#fff; background:var(--good);}
+  .badge.miss{color:#fff; background:var(--bad);}
+  .badge.flat{color:var(--page); background:var(--muted);}
+  .movenum{font-variant-numeric:tabular-nums;}
+  .up-ink{color:var(--good-ink);} .down-ink{color:var(--bad);}
+  .lens{background:var(--surface-2); border-radius:10px; padding:13px 15px; margin-top:10px;}
+  .lens .tag{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--accent); margin-bottom:5px;}
+  .lens p{margin:0; font-size:.92rem;}
+  .teach{margin-top:10px; font-size:.88rem;}
+  .teach summary{cursor:pointer; font-weight:600; color:var(--series); font-size:.85rem;}
+  html[data-theme="dark"] .teach summary{color:#9ec5f4;}
+  .teach .body{margin-top:8px; color:var(--ink-2); padding-left:2px;}
+  .teach .body ul{margin:6px 0 0; padding-left:18px;}
+  .teach .body li{margin-bottom:4px;}
+
+  .nav{display:flex; justify-content:flex-end; margin-top:16px;}
+
+  /* tooltip */
+  .tip{position:fixed; pointer-events:none; background:var(--ink); color:var(--page);
+    font-size:.76rem; padding:5px 8px; border-radius:6px; opacity:0; transition:opacity .1s; z-index:20;
+    font-variant-numeric:tabular-nums; white-space:nowrap;}
+
+  /* instructor / end panels */
+  .panel{display:none;}
+  .panel.show{display:block;}
+  .note{background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
+    border-radius:10px; padding:16px 18px; margin-bottom:14px;}
+  .note h3{margin:0 0 8px; font-size:1rem;}
+  .note p, .note li{font-size:.9rem; color:var(--ink-2);}
+  .endgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; margin:14px 0;}
+  .kpi{background:var(--surface-2); border-radius:10px; padding:12px 14px; text-align:center;}
+  .kpi .n{font-size:1.7rem; font-weight:700; letter-spacing:-.02em;}
+  .kpi .l{font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
+  table.summary{width:100%; border-collapse:collapse; font-size:.84rem; margin-top:8px;}
+  table.summary th, table.summary td{text-align:left; padding:7px 8px; border-bottom:1px solid var(--border); vertical-align:top;}
+  table.summary th{color:var(--muted); font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.03em;}
+  table.summary td.dir{font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .foot{font-size:.76rem; color:var(--muted); margin-top:24px; text-align:center;}
+  a{color:var(--series);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>The Dollar Time Machine</h1>
+      <p class="sub">Econ 476 · International Finance — trade the U.S. dollar (DXY), one month at a time, Jan 2024 → Dec 2025.</p>
+    </div>
+    <div class="toolbtns">
+      <span class="pill" id="saveStatus"></span>
+      <button class="ghost" id="instrBtn">Instructor guide</button>
+      <button class="ghost" id="themeBtn">Dark</button>
+    </div>
+  </header>
+
+  <!-- GAME PANEL -->
+  <div class="panel show" id="gamePanel">
+    <div class="rail" id="rail"></div>
+    <div class="railmeta"><span id="railLeft">Turn 1 of 12</span><span id="railRight">Correct calls: 0 / 0</span></div>
+    <div id="turnMount"></div>
+  </div>
+
+  <!-- INSTRUCTOR PANEL -->
+  <div class="panel" id="instrPanel">
+    <div class="note">
+      <h3>How to run this in class</h3>
+      <p>This is a <strong>historical replay</strong>: the market is frozen and you control the clock. Each turn shows students only what was known at that moment. They commit a direction on the dollar, <em>then</em> you reveal what actually happened and why. Because it's history, there's no live-data scramble and it runs identically every year.</p>
+      <p><strong>Suggested loop (5–7 min per turn):</strong></p>
+      <ul>
+        <li>Project the turn. Read the headlines aloud; give 60–90 seconds.</li>
+        <li>Students commit <strong>Long / Short / Flat</strong> — show of hands, clickers, or the button here — and one-line <em>why</em> tied to a model (UIP, PPP, monetary approach, BOP, risk premium).</li>
+        <li>Click <strong>Lock in &amp; reveal</strong>. Discuss: who was right, and was their <em>reasoning</em> right?</li>
+        <li>Advance. Do 3–4 turns per session, or the whole arc as a review before the final.</li>
+      </ul>
+      <p><strong>Grade the reasoning, not the P&amp;L.</strong> A well-argued call that lost still earns credit; a lucky guess with no model doesn't. The self-scored tally here is just a hook — the learning is in the "why."</p>
+    </div>
+    <div class="note">
+      <h3>Where it lands in your syllabus</h3>
+      <p>Turns 1–10 (2024) drill the <strong>asset &amp; monetary approaches</strong> — interest-rate differentials, UIP, expectations, the carry trade. Turns 11–12 (2025) set up <strong>Ch. 20 crises &amp; the group project</strong>: a crowded consensus unwinds, and tariffs move the dollar the "wrong" way — the capstone that the capital account, not the trade account, drives exchange rates.</p>
+    </div>
+    <div class="note">
+      <h3>A note on the numbers</h3>
+      <p>DXY figures are approximate month-end levels compiled from public reporting; a few second-half-2025 points are interpolated between verified anchors (end-2024 ≈ 108.5; Jun 30 2025 = 97.09; Sept 2025 bottom ≈ 96.5; Dec 31 2025 = 97.96). The teaching point is <em>direction and magnitude</em>, not the third decimal. Update any value to your preferred source in the <code>SERIES</code> / <code>TURNS</code> arrays in this file.</p>
+    </div>
+    <div class="note">
+      <h3>Collecting responses into a Google Sheet</h3>
+      <p>Every locked-in call saves a row — <em>time, name, turn, choice, actual move, correct?, and the typed rationale</em> — to a Google Sheet you own. One-time setup (~10 min):</p>
+      <ul>
+        <li>Create a Google Sheet (use your <strong>@wm.edu</strong> account).</li>
+        <li><strong>Extensions → Apps Script.</strong> Delete the sample, paste the <code>Code.gs</code> I sent, and Save.</li>
+        <li><strong>Deploy → New deployment → Web app.</strong> Set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>, then Deploy and authorize.</li>
+        <li>Copy the <strong>Web app URL</strong> and paste it into <code>SHEET_ENDPOINT = "…"</code> near the top of this HTML file's script.</li>
+        <li>Commit the file to your GitHub Pages repo. Done — clicks now stream into the sheet; use <em>File → Download → Microsoft Excel</em> anytime.</li>
+      </ul>
+      <p><strong>W&amp;M Workspace caveat:</strong> if your @wm.edu account blocks "Anyone" access to web apps, either set access to "Anyone within William &amp; Mary" (students must be signed into their W&amp;M Google account) or host the script from a personal Gmail account. The indicator top-right shows <em>Saved ✓</em> / <em>Save failed ✗</em> so you can confirm it's working. The <em>Export my responses (CSV)</em> button on the final screen is a backup if the sheet isn't connected.</p>
+    </div>
+    <div class="nav"><button class="primary" id="backToGame">Back to the game</button></div>
+  </div>
+
+  <p class="foot">Built for Prof. Smit's Econ 476 · a self-contained classroom tool — no internet or login needed. Refresh to reset.</p>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+/* ---------- DXY monthly series (approx month-end) ---------- */
+const SERIES = [
+  {m:"Dec '23",v:101.3},{m:"Jan '24",v:103.3},{m:"Feb '24",v:104.2},{m:"Mar '24",v:104.5},
+  {m:"Apr '24",v:106.2},{m:"May '24",v:104.6},{m:"Jun '24",v:105.9},{m:"Jul '24",v:104.1},
+  {m:"Aug '24",v:101.7},{m:"Sep '24",v:100.8},{m:"Oct '24",v:104.0},{m:"Nov '24",v:105.7},
+  {m:"Dec '24",v:108.5},{m:"Jan '25",v:108.4},{m:"Feb '25",v:107.6},{m:"Mar '25",v:104.2},
+  {m:"Apr '25",v:99.5},{m:"May '25",v:99.4},{m:"Jun '25",v:97.1},{m:"Jul '25",v:98.6},
+  {m:"Aug '25",v:97.9},{m:"Sep '25",v:96.8},{m:"Oct '25",v:99.1},{m:"Nov '25",v:99.0},{m:"Dec '25",v:97.96}
+];
+
+/* ---------- The 12 turns ---------- */
+/* dir: "UP" = dollar strengthens (DXY rises), "DOWN" = dollar weakens */
+const TURNS = [
+  {
+    phase:"Part I · Exchange-rate determination",
+    date:"Late January 2024", knownIdx:1, outIdx:3,
+    level:"103.3", horizon:"Where is the dollar by the end of March?",
+    know:[
+      "The Fed is holding at 5.25–5.50% — the highest in over two decades — and keeps saying \"higher for longer.\"",
+      "The U.S. economy refuses to slow: strong jobs, sticky ~3–4% inflation. Markets keep pushing back their bets on the first rate cut.",
+      "The dollar has firmed from ~101 at the end of 2023 to 103.3."
+    ],
+    tag:"Asset approach · UIP",
+    lens:"The dollar rose to ~104.5. With the Fed on hold and cut-hopes fading, the expected U.S. interest-rate path stayed high relative to abroad. By uncovered interest parity, a higher relative return on dollar assets — with no offsetting expected depreciation — pulls capital in and lifts the dollar.",
+    teach:["Tie to the asset approach: today's spot rate reacts to the <em>expected future path</em> of relative interest rates, not just today's level.","Ask: what would have to change abroad (ECB/BoJ) to flip this?"]
+  },
+  {
+    phase:"Part I · Exchange-rate determination",
+    date:"End of March 2024", knownIdx:3, outIdx:4,
+    level:"104.5", horizon:"Dollar direction into late April?",
+    know:[
+      "The Bank of Japan just exited negative interest rates (its first hike since 2007) — yet the yen keeps sliding toward 150+.",
+      "U.S. disinflation is stalling; each new CPI print comes in hot.",
+      "Cut expectations for the Fed are being pared back again."
+    ],
+    tag:"Monetary approach · expectations",
+    lens:"The dollar jumped to ~106.2. Hot U.S. inflation data meant markets priced <em>fewer, later</em> Fed cuts — a higher expected rate path — so the dollar climbed. And despite the BoJ's historic hike, the still-enormous U.S.–Japan rate gap kept the yen weak (it hit ~160, prompting Japanese intervention).",
+    teach:["Great illustration that a rate <em>hike abroad</em> needn't strengthen that currency if the differential is still huge.","Connect to the monetary approach: inflation surprises move the expected policy path, which moves the exchange rate now."]
+  },
+  {
+    phase:"Part I · Exchange-rate determination",
+    date:"End of April 2024", knownIdx:4, outIdx:5,
+    level:"106.2", horizon:"Can the dollar hold its highs into May?",
+    know:[
+      "The dollar sits near its year-to-date high; the yen hit ~160 and Japan's Ministry of Finance intervened to prop it up.",
+      "Positioning is heavily long-dollar — almost everyone is on the same side.",
+      "Watch the next round of U.S. CPI and jobs data."
+    ],
+    tag:"Data-driven repricing · mean reversion",
+    lens:"The dollar slipped to ~104.6. Softer April inflation and a cooler jobs report revived hopes of Fed cuts, trimming the expected rate path. After an overshoot and with a very crowded long-dollar trade, the pullback was sharp — a reminder that FX overshoots and then reverts as new data arrives.",
+    teach:["Introduce overshooting: prices jump on news, then partially unwind.","Note the role of crowded positioning — when everyone is long, surprises hurt more."]
+  },
+  {
+    phase:"Part II · Balance of payments",
+    date:"End of May 2024", knownIdx:5, outIdx:6,
+    level:"104.6", horizon:"Dollar vs. euro into late June?",
+    know:[
+      "The European Central Bank is set to cut rates on June 6 — likely <em>before</em> the Fed.",
+      "French political turmoil (a snap election) is raising Europe's risk premium.",
+      "U.S. data has steadied; the Fed is still on hold."
+    ],
+    tag:"Relative monetary policy · risk premium",
+    lens:"The dollar rose to ~105.9. The ECB cut first, widening the rate differential in the dollar's favor, and French political risk pushed investors out of the euro. Since the euro is ~58% of DXY, a weaker euro mechanically lifts the index.",
+    teach:["Reinforce that DXY is a euro-heavy basket — \"dollar strength\" is often \"euro weakness.\"","Relative policy: it's the <em>gap</em> between central banks that matters, not either one alone."]
+  },
+  {
+    phase:"Part II · Balance of payments",
+    date:"End of June 2024", knownIdx:6, outIdx:7,
+    level:"105.9", horizon:"Dollar direction through July?",
+    know:[
+      "June U.S. inflation is finally cooling; markets now lean toward a September Fed cut.",
+      "The yen carry trade is enormous — investors borrow cheap yen to buy higher-yielding assets.",
+      "Chatter grows that the BoJ may hike again in late July."
+    ],
+    tag:"Expected easing · carry setup",
+    lens:"The dollar eased to ~104.1. Cooler inflation pulled forward expected Fed cuts, softening the dollar. Beneath the surface, the yen began to firm as a BoJ hike loomed — the first tremor before the carry-trade earthquake in August.",
+    teach:["Set up the carry trade: borrow low-yield (yen), invest high-yield (dollar). Ask what happens if that gap narrows suddenly.","Foreshadow: what could force a fast unwind?"]
+  },
+  {
+    phase:"Part III · Fixed/floating & crises",
+    date:"Late July 2024", knownIdx:7, outIdx:8,
+    level:"104.1", horizon:"Dollar into early/mid August?",
+    know:[
+      "The BoJ hiked again on July 31; the yen is strengthening fast.",
+      "The Fed held but all but promised a September cut — the U.S.–Japan gap is set to narrow from both ends.",
+      "A weak U.S. jobs report just landed (Aug 2), stoking recession fears."
+    ],
+    tag:"Carry unwind · UIP in reverse · risk-off",
+    lens:"The dollar plunged toward ~101 (and briefly ~100.5). The narrowing rate gap made the yen carry trade unprofitable; a stampede to buy back yen and cut risk (the Aug 5 global sell-off, VIX spiking) sent the yen soaring and the dollar down. This is UIP working violently in reverse.",
+    teach:["Marquee turn. Walk through the mechanics of an unwind: everyone exits the same trade at once.","Link to speculative dynamics you'll formalize in Ch. 20 — self-reinforcing capital flows."]
+  },
+  {
+    phase:"Part III · Fixed/floating & crises",
+    date:"End of August 2024", knownIdx:8, outIdx:9,
+    level:"101.7", horizon:"How much lower can the dollar go in September?",
+    know:[
+      "Markets are now pricing aggressive Fed easing; some expect a 50bp cut.",
+      "At Jackson Hole, Powell signaled \"the time has come\" to cut.",
+      "The dollar has already fallen a long way from its April highs."
+    ],
+    tag:"Expectations already priced",
+    lens:"The dollar barely moved — down to ~100.8. The Fed did deliver a jumbo 50bp cut on Sept 18, but markets had already priced it in, so the <em>actual</em> event moved the dollar very little. The lesson: exchange rates respond to <em>surprises</em> relative to expectations, not to events everyone already saw coming.",
+    teach:["The efficient-markets point: \"buy the rumor, sell the fact.\" A big, expected cut ≠ a big move.","Contrast with Turn 10, where the surprise is what moves the dollar."]
+  },
+  {
+    phase:"Part III · Fixed/floating & crises",
+    date:"End of September 2024", knownIdx:9, outIdx:10,
+    level:"100.8", horizon:"Dollar direction through October?",
+    know:[
+      "The dollar is at its 2024 low; the Fed has just begun cutting.",
+      "The U.S. election (Nov 5) is five weeks out and tightening.",
+      "Incoming data (jobs, spending) is starting to surprise to the upside."
+    ],
+    tag:"Growth surprise · repricing",
+    lens:"The dollar rallied hard to ~104. A blowout September jobs report (released Oct 4) killed the \"hard landing\" story, so markets pared back how many cuts the Fed would deliver — repricing the rate path <em>up</em>. A building \"election trade\" added fuel.",
+    teach:["Good data can strengthen a currency even mid-cutting-cycle: fewer expected cuts = higher expected path.","Introduce the idea of a political risk/expectations premium ahead of an election."]
+  },
+  {
+    phase:"Part III · Fixed/floating & crises",
+    date:"End of October 2024", knownIdx:10, outIdx:11,
+    level:"104.0", horizon:"Where does the election take the dollar in November?",
+    know:[
+      "The U.S. presidential election is on Nov 5 and too close to call.",
+      "One outcome is associated with tariffs, tax cuts, and larger deficits.",
+      "The Fed is expected to cut again on Nov 7."
+    ],
+    tag:"Fiscal/tariff reflation · policy expectations",
+    lens:"The dollar spiked to ~107 after the Nov 5 result, then settled near 105.7. Markets read the election as meaning tariffs + fiscal expansion → higher inflation and a higher expected rate path → a stronger dollar (the \"reflation trade\"). A Fed cut on Nov 7 barely dented it.",
+    teach:["Policy expectations move FX before any policy is enacted.","Preview the paradox for Turn 12: markets initially <em>bought</em> the dollar on tariffs. Do tariffs really strengthen a currency?"]
+  },
+  {
+    phase:"Part III · Fixed/floating & crises",
+    date:"End of November 2024", knownIdx:11, outIdx:12,
+    level:"105.7", horizon:"Dollar direction into year-end?",
+    know:[
+      "The Fed is widely expected to cut 25bp on Dec 18 — that part looks priced in.",
+      "The real question is the Fed's <em>guidance</em> for 2025 (the \"dot plot\").",
+      "The dollar is already strong on the reflation trade."
+    ],
+    tag:"Hawkish surprise · guidance",
+    lens:"The dollar surged to ~108.5 — a two-year high. The Fed cut as expected but signaled <em>fewer</em> cuts in 2025 than markets wanted (a hawkish dot plot). It's the change in the expected <em>path</em>, not the cut itself, that moved the dollar.",
+    teach:["Pair with Turn 7: same action (a cut), opposite dollar reaction — because one was a dovish surprise-that-wasn't and this was a hawkish surprise.","Emphasize forward guidance as a policy tool."]
+  },
+  {
+    phase:"2025 · The turn",
+    date:"Late January 2025", knownIdx:13, outIdx:15,
+    level:"≈109", horizon:"The dollar peaked near 110 and everyone is bullish. Where is it by end of March?",
+    know:[
+      "The dollar spiked toward ~110 in mid-January; sentiment and positioning are overwhelmingly long-dollar.",
+      "A new administration takes office Jan 20 promising aggressive tariffs — seen as dollar-positive.",
+      "Almost every bank forecast calls for continued dollar strength (\"parity with the euro\")."
+    ],
+    tag:"Crowded consensus · relative growth shift",
+    lens:"The dollar fell to ~104.2 by end-March. The consensus long-dollar trade was exhausted, and the ground shifted abroad: in early March, Europe announced a massive fiscal expansion (German debt-brake reform, defense spending), lifting the euro and European growth expectations. When everyone already owns the trade, there's no one left to buy.",
+    teach:["Positioning matters: a maximally crowded trade is fragile.","Relative growth/fiscal outlook can dominate rate differentials — the driver rotated from \"U.S. exceptionalism\" to \"rest-of-world catches up.\""]
+  },
+  {
+    phase:"2025 · The capstone",
+    date:"Early April 2025", knownIdx:15, outIdx:24,
+    level:"104.2", horizon:"Sweeping \"Liberation Day\" tariffs drop April 2. Textbook says tariffs cut imports and help the currency — so where does the dollar go for the rest of 2025?",
+    know:[
+      "On April 2, the U.S. announces broad \"reciprocal\" tariffs — a ~10% baseline on nearly all imports, higher on many countries.",
+      "Standard trade intuition: fewer imports → improved trade balance → <em>stronger</em> dollar.",
+      "But U.S. stocks are wobbling and foreign investors are questioning U.S. policy credibility."
+    ],
+    tag:"THE TWIST · capital account beats trade account",
+    lens:"The dollar <em>plunged</em> — through 100, bottoming near 96.5 by September, ending 2025 at 97.96 (its worst year since 1973). The textbook trade-balance channel was swamped by the capital account: U.S. stocks, bonds, AND the dollar sold off together as investors repriced U.S. policy risk and questioned the dollar's safe-haven status. Money flowed to the euro, franc, and gold. Exchange rates are set in asset markets — confidence and capital flows, not just the trade balance.",
+    teach:["The payoff of the whole game: the asset/capital-account view of exchange rates beats the flows/trade view. A \"pro-trade-balance\" policy tanked the currency.","The rare triple sell-off (equities + bonds + FX) is a hallmark of a confidence/risk-premium shock — perfect fuel for the Ch. 20 crisis unit and the group project.","Ask students to find another episode (e.g., an EM) where policy credibility, not fundamentals, moved the currency."]
+  }
+];
+
+/* ======================================================================
+   COLLECTING RESPONSES INTO A GOOGLE SHEET
+   Paste your Google Apps Script Web-App URL between the quotes below.
+   Leave it "" to run the game with NO saving (works fine, local only).
+   Step-by-step: click "Instructor guide" in the app, or read SETUP.
+   ====================================================================== */
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzTJU184AJ8NP66no-X9ebMDN8vGKiUsBGVl_-hHvhUCmavOFaUKZjquiG9T4Sf9pg/exec";   // e.g. "https://script.google.com/macros/s/AKfy...../exec"
+
+/* ---------- state ---------- */
+let cur = 0;
+let view = 'gate';                                   // 'gate' | 'game' | 'end'
+const answers = new Array(TURNS.length).fill(null);  // {choice, correct}
+const player = { name:'', session:'' };
+const allRows = [];                                  // every logged row, for CSV fallback
+const tip = document.getElementById('tip');
+
+function genSession(){ return 'S'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+function setSaveStatus(state){
+  const el=document.getElementById('saveStatus'); if(!el) return;
+  const map={
+    local:['◦ Local only (no sheet)','var(--muted)'],
+    saving:['⤴ Saving…','var(--muted)'],
+    ok:['✓ Saved','var(--good)'],
+    err:['✗ Save failed','var(--bad)']
+  };
+  const m=map[state]; if(!m){ el.style.display='none'; return; }
+  el.textContent=m[0]; el.style.color=m[1]; el.style.display='inline-flex';
+}
+
+function logResponse(row){
+  allRows.push(row);
+  if(!SHEET_ENDPOINT){ setSaveStatus('local'); return; }
+  setSaveStatus('saving');
+  fetch(SHEET_ENDPOINT,{
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},   // text/plain avoids a CORS preflight
+    body: JSON.stringify(row)
+  }).then(()=>setSaveStatus('ok')).catch(()=>setSaveStatus('err'));
+}
+
+function exportCsv(){
+  const head=['Client time','Name','Session','Turn','Decision date','Choice','Actual move','Correct','Rationale'];
+  const esc=x=>`"${String(x==null?'':x).replace(/"/g,'""')}"`;
+  const body=allRows.map(r=>[r.clientTime,r.name,r.session,r.turn,r.date,r.choice,r.actual,r.correct,r.rationale].map(esc).join(','));
+  const csv=[head.map(esc).join(',')].concat(body).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`dxy-responses-${(player.name||'me').replace(/\s+/g,'_')}.csv`;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* ---------- chart ---------- */
+function buildChart(upToIdx, revealToIdx){
+  // dims
+  const W=860,H=230, mL=34,mR=14,mT=12,mB=24;
+  const iw=W-mL-mR, ih=H-mT-mB;
+  const n=SERIES.length;
+  const vmin=95.5, vmax=110.5;
+  const x=i=> mL + (iw*(i/(n-1)));
+  const y=v=> mT + ih*(1-(v-vmin)/(vmax-vmin));
+  const shown = revealToIdx!=null ? revealToIdx : upToIdx;
+
+  // gridlines
+  let grid="";
+  [96,100,104,108].forEach(gv=>{
+    const yy=y(gv).toFixed(1);
+    grid+=`<line x1="${mL}" x2="${W-mR}" y1="${yy}" y2="${yy}" stroke="var(--grid)" stroke-width="1"/>`;
+    grid+=`<text x="${mL-6}" y="${(+yy+3).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${gv}</text>`;
+  });
+  // x labels every 3 months
+  let xlab="";
+  for(let i=1;i<n;i+=3){
+    xlab+=`<text x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9.5" fill="var(--muted)">${SERIES[i].m}</text>`;
+  }
+
+  // known path (solid) up to upToIdx
+  let dKnown="";
+  for(let i=0;i<=upToIdx;i++){ dKnown+=(i?"L":"M")+x(i).toFixed(1)+" "+y(SERIES[i].v).toFixed(1)+" "; }
+  // revealed extension
+  let dRev="";
+  if(revealToIdx!=null){
+    for(let i=upToIdx;i<=revealToIdx;i++){ dRev+=(i===upToIdx?"M":"L")+x(i).toFixed(1)+" "+y(SERIES[i].v).toFixed(1)+" "; }
+  }
+
+  // dots + hover targets for shown range
+  let dots="", hit="";
+  for(let i=0;i<=shown;i++){
+    const isEnd = i===shown;
+    const r = isEnd?4.5:2.4;
+    const fill = (revealToIdx!=null && i>upToIdx) ? "var(--accent)" : "var(--series)";
+    dots+=`<circle cx="${x(i).toFixed(1)}" cy="${y(SERIES[i].v).toFixed(1)}" r="${r}" fill="${fill}" stroke="var(--surface)" stroke-width="1.5"/>`;
+    hit+=`<circle cx="${x(i).toFixed(1)}" cy="${y(SERIES[i].v).toFixed(1)}" r="12" fill="transparent" data-m="${SERIES[i].m}" data-v="${SERIES[i].v}" class="hitpt"/>`;
+  }
+
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="U.S. Dollar Index over time">
+    ${grid}${xlab}
+    <path d="${dKnown}" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${dRev?`<path d="${dRev}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="1 0" stroke-linejoin="round" stroke-linecap="round"/>`:""}
+    ${dots}${hit}
+  </svg>`;
+}
+
+function wireChartHover(root){
+  root.querySelectorAll('.hitpt').forEach(pt=>{
+    pt.addEventListener('mousemove',e=>{
+      tip.textContent = `${pt.dataset.m} · DXY ${pt.dataset.v}`;
+      tip.style.left=(e.clientX+12)+'px'; tip.style.top=(e.clientY-10)+'px'; tip.style.opacity=1;
+    });
+    pt.addEventListener('mouseleave',()=>{tip.style.opacity=0;});
+  });
+}
+
+/* ---------- render a turn ---------- */
+function render(){
+  view='game';
+  // rail
+  const rail=document.getElementById('rail'); rail.innerHTML='';
+  TURNS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pip'+(i<cur||answers[i]?' done':'')+(i===cur?' cur':'');
+    rail.appendChild(d);
+  });
+  const done = answers.filter(Boolean).length;
+  const right = answers.filter(a=>a&&a.correct===true).length;
+  document.getElementById('railLeft').textContent=`Turn ${cur+1} of ${TURNS.length}`;
+  document.getElementById('railRight').textContent=`Correct calls: ${right} / ${done}`;
+
+  const t=TURNS[cur];
+  const prior=answers[cur];
+  const mount=document.getElementById('turnMount');
+  mount.innerHTML=`
+    <div class="card">
+      <div class="turnhead">
+        <h2>Turn ${cur+1} — ${t.date}</h2>
+        <span class="phase">${t.phase}</span>
+      </div>
+      <div class="statrow">
+        <div class="stat"><div class="k">DXY now</div><div class="v">${t.level}</div></div>
+      </div>
+      <div class="know">
+        <h3>What you know right now</h3>
+        <ul>${t.know.map(k=>`<li>${k}</li>`).join('')}</ul>
+      </div>
+      <figure class="chart" id="chartFig">
+        ${buildChart(t.knownIdx, prior?t.outIdx:null)}
+        <figcaption class="cap">U.S. Dollar Index (DXY), approx. month-end. Hover a point for its value.${prior?' · Orange = what happened next.':''}</figcaption>
+      </figure>
+
+      <div class="decide">
+        <h3>Your call</h3>
+        <p class="qhint">${t.horizon}</p>
+        <div class="choices" id="choices">
+          <button class="choice up" data-c="UP"><span class="big"><span class="arrow">▲</span> Long the dollar</span><span class="desc">DXY rises</span></button>
+          <button class="choice down" data-c="DOWN"><span class="big"><span class="arrow">▼</span> Short the dollar</span><span class="desc">DXY falls</span></button>
+          <button class="choice flat" data-c="FLAT"><span class="big"><span class="arrow">■</span> Stay flat</span><span class="desc">roughly unchanged / hedge</span></button>
+        </div>
+        <div class="why">
+          <label for="rat">Your reasoning (name the model — UIP, monetary approach, BOP, risk premium…). This is what earns credit.</label>
+          <textarea id="rat" placeholder="e.g. Fed on hold vs. ECB cutting → wider rate gap → by UIP the dollar should…"></textarea>
+        </div>
+        <div class="actions">
+          <button class="primary" id="revealBtn" disabled>Lock in &amp; reveal</button>
+          <span class="scoretag" id="scoretag"></span>
+        </div>
+      </div>
+
+      <div class="reveal" id="reveal"></div>
+    </div>
+  `;
+  wireChartHover(mount);
+
+  let choice = prior?prior.choice:null;
+  const choiceBtns=[...mount.querySelectorAll('.choice')];
+  const revealBtn=mount.querySelector('#revealBtn');
+  function selectChoice(c){
+    choice=c;
+    choiceBtns.forEach(b=>b.classList.toggle('sel',b.dataset.c===c));
+    revealBtn.disabled=false;
+  }
+  choiceBtns.forEach(b=>b.addEventListener('click',()=>{ if(prior) return; selectChoice(b.dataset.c); }));
+
+  if(prior){
+    selectChoice(prior.choice);
+    choiceBtns.forEach(b=>b.disabled=true);
+    revealBtn.disabled=true; revealBtn.textContent='Revealed';
+    showReveal(t, prior.choice, false);
+  }
+
+  revealBtn.addEventListener('click',()=>{
+    if(!choice) return;
+    const actual=t.dir!==undefined?t.dir:(SERIES[t.outIdx].v>SERIES[t.knownIdx].v?'UP':'DOWN');
+    const correct = (choice==='UP'&&actual==='UP')||(choice==='DOWN'&&actual==='DOWN');
+    answers[cur]={choice, correct: choice==='FLAT'?null:correct};
+    const rationale=(mount.querySelector('#rat')?.value||'').trim();
+    logResponse({ clientTime:new Date().toISOString(), name:player.name,
+      session:player.session, turn:cur+1, date:t.date, choice,
+      actual, correct: choice==='FLAT'?'flat':(correct?'yes':'no'), rationale });
+    choiceBtns.forEach(b=>b.disabled=true);
+    revealBtn.disabled=true; revealBtn.textContent='Revealed';
+    // redraw chart with reveal
+    document.getElementById('chartFig').innerHTML =
+      buildChart(t.knownIdx, t.outIdx)+
+      `<figcaption class="cap">U.S. Dollar Index (DXY), approx. month-end. Orange = what happened next.</figcaption>`;
+    wireChartHover(document.getElementById('chartFig'));
+    showReveal(t, choice, true);
+    render(); // refresh rail/score — but keep reveal open
+  });
+}
+
+function showReveal(t, choice, animate){
+  const startV=SERIES[t.knownIdx].v, endV=SERIES[t.outIdx].v;
+  const actual = endV>startV?'UP':'DOWN';
+  const pct=((endV-startV)/startV*100);
+  const pctTxt=(pct>=0?'+':'')+pct.toFixed(1)+'%';
+  const correct=(choice==='UP'&&actual==='UP')||(choice==='DOWN'&&actual==='DOWN');
+  let badge;
+  if(choice==='FLAT') badge=`<span class="badge flat">◆ You hedged</span>`;
+  else badge = correct?`<span class="badge hit">✓ Correct call</span>`:`<span class="badge miss">✗ Missed</span>`;
+  const dirWord = actual==='UP'?'strengthened':'weakened';
+  const dirInk = actual==='UP'?'up-ink':'down-ink';
+  const rev=document.getElementById('reveal');
+  rev.innerHTML=`
+    <div class="verdict">${badge}
+      <span>The dollar ${dirWord}: <span class="movenum ${dirInk}">${t.level} → ${endV.toFixed(1)} (${pctTxt})</span></span>
+    </div>
+    <div class="lens">
+      <div class="tag">Model lens · ${t.tag}</div>
+      <p>${t.lens}</p>
+    </div>
+    <details class="teach"><summary>Teaching note &amp; discussion prompts</summary>
+      <div class="body"><ul>${t.teach.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+    </details>
+    <div class="nav">
+      ${cur<TURNS.length-1
+        ? `<button class="primary" id="nextBtn">Next turn →</button>`
+        : `<button class="primary" id="finishBtn">See the big picture →</button>`}
+    </div>
+  `;
+  rev.classList.add('show');
+  const nb=rev.querySelector('#nextBtn'); if(nb) nb.addEventListener('click',()=>{cur++; render(); window.scrollTo({top:0,behavior:'smooth'});});
+  const fb=rev.querySelector('#finishBtn'); if(fb) fb.addEventListener('click',()=>{renderEnd(); window.scrollTo({top:0,behavior:'smooth'});});
+}
+
+/* ---------- end screen ---------- */
+function renderEnd(){
+  view='end';
+  const done=answers.filter(a=>a&&a.correct!==null).length;
+  const right=answers.filter(a=>a&&a.correct===true).length;
+  const mount=document.getElementById('turnMount');
+  document.getElementById('rail').innerHTML=TURNS.map(()=>'<div class="pip done"></div>').join('');
+  document.getElementById('railLeft').textContent='Complete';
+  document.getElementById('railRight').textContent=`Correct calls: ${right} / ${done}`;
+  const rows=TURNS.map((t,i)=>{
+    const s=SERIES[t.knownIdx].v, e=SERIES[t.outIdx].v, p=((e-s)/s*100);
+    const dir=e>s?'▲':'▼'; const ink=e>s?'up-ink':'down-ink';
+    const a=answers[i];
+    const mark=!a?'—':a.choice==='FLAT'?'◆ flat':(a.correct?'✓':'✗');
+    return `<tr><td>${i+1}</td><td>${t.date}</td><td class="dir ${ink}">${dir} ${(p>=0?'+':'')+p.toFixed(1)}%</td><td>${mark}</td><td>${t.tag}</td></tr>`;
+  }).join('');
+  mount.innerHTML=`
+    <div class="card">
+      <div class="turnhead"><h2>The big picture — 24 months of the dollar</h2><span class="phase">Debrief</span></div>
+      <figure class="chart" id="endchart">${buildChart(SERIES.length-1,null)}
+        <figcaption class="cap">The full DXY path, Dec 2023 → Dec 2025. Hover any point.</figcaption></figure>
+      <div class="endgrid">
+        <div class="kpi"><div class="n">${right}/${done}</div><div class="l">Your direction calls</div></div>
+        <div class="kpi"><div class="n up-ink">108.5</div><div class="l">2024 high (Dec)</div></div>
+        <div class="kpi"><div class="n down-ink">96.5</div><div class="l">2025 low (Sep)</div></div>
+        <div class="kpi"><div class="n down-ink">−10%</div><div class="l">2025 full-year</div></div>
+      </div>
+      <div class="lens">
+        <div class="tag">The one thing to remember</div>
+        <p>For two years the dollar was driven by <strong>asset markets and expectations</strong> — relative interest-rate paths, surprises vs. what was priced, crowded positioning, and finally a collapse in policy <em>confidence</em>. In 2025 a policy meant to shrink the trade deficit (tariffs) sent the dollar to its worst year since 1973, because the <strong>capital account</strong> — where global investors choose to park their money — moved far more than the trade account. Exchange rates are set where the world decides whether to hold your assets.</p>
+      </div>
+      <table class="summary">
+        <thead><tr><th>#</th><th>Decision point</th><th>Actual move</th><th>You</th><th>Concept</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="nav" style="gap:10px">
+        <button class="ghost" id="exportCsv">⤓ Export my responses (CSV)</button>
+        <button class="primary" id="restart">Play again</button>
+      </div>
+    </div>`;
+  wireChartHover(mount);
+  mount.querySelector('#exportCsv').addEventListener('click',exportCsv);
+  mount.querySelector('#restart').addEventListener('click',()=>{
+    cur=0; for(let i=0;i<answers.length;i++)answers[i]=null; render(); window.scrollTo({top:0,behavior:'smooth'});
+  });
+}
+
+/* ---------- sign-in gate ---------- */
+function renderGate(){
+  view='gate';
+  document.getElementById('rail').innerHTML='';
+  document.getElementById('railLeft').textContent='Sign in to begin';
+  document.getElementById('railRight').textContent='';
+  setSaveStatus(SHEET_ENDPOINT?null:'local');
+  document.getElementById('turnMount').innerHTML=`
+    <div class="card">
+      <div class="turnhead"><h2>Before you start</h2><span class="phase">Sign in</span></div>
+      <p class="qhint" style="margin-top:12px">Enter your name to begin. Each Long / Short / Flat call and your reasoning are recorded for participation credit.</p>
+      <div class="why"><label for="gName">Full name</label><input id="gName" class="ginput" autocomplete="off" placeholder="Jane Tribe"></div>
+      <div class="actions">
+        <button class="primary" id="startBtn" disabled>Start the game →</button>
+        <span class="scoretag">${SHEET_ENDPOINT?'Responses save automatically.':'No sheet connected — responses stay on this device (see Instructor guide).'}</span>
+      </div>
+    </div>`;
+  const n=document.getElementById('gName'), b=document.getElementById('startBtn');
+  const chk=()=>{ b.disabled=!n.value.trim(); };
+  n.addEventListener('input',chk);
+  const go=()=>{ if(b.disabled) return;
+    player.name=n.value.trim(); player.session=genSession();
+    cur=0; for(let k=0;k<answers.length;k++)answers[k]=null; allRows.length=0;
+    setSaveStatus(SHEET_ENDPOINT?null:'local');
+    render(); window.scrollTo({top:0,behavior:'smooth'}); };
+  b.addEventListener('click',go);
+  n.addEventListener('keydown',e=>{ if(e.key==='Enter') go(); });
+}
+
+/* ---------- panels & theme ---------- */
+const gameP=document.getElementById('gamePanel'), instrP=document.getElementById('instrPanel');
+document.getElementById('instrBtn').addEventListener('click',()=>{gameP.classList.remove('show');instrP.classList.add('show');});
+document.getElementById('backToGame').addEventListener('click',()=>{instrP.classList.remove('show');gameP.classList.add('show');});
+const themeBtn=document.getElementById('themeBtn');
+function redrawView(){ view==='gate'?renderGate():view==='end'?renderEnd():render(); }
+themeBtn.addEventListener('click',()=>{
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
+  themeBtn.textContent=dark?'Dark':'Light';
+  redrawView(); // recolor svg + preserve current screen
+});
+
+renderGate();
+</script>
+</body>
+</html>
