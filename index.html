@@ -45,11 +45,10 @@
   .ginput{width:100%; border:1px solid var(--border); border-radius:9px; padding:10px 12px;
     font-family:inherit; font-size:.95rem; background:var(--surface); color:var(--ink);}
   .ginput:focus{outline:none; border-color:var(--series); box-shadow:0 0 0 3px var(--series-soft);}
-  .signedin{font-size:.78rem; color:var(--muted);}
 
   /* progress rail */
-  .rail{display:flex; gap:5px; margin:16px 0 4px; flex-wrap:wrap;}
-  .pip{height:6px; flex:1 1 30px; border-radius:99px; background:var(--grid);}
+  .rail{display:flex; gap:4px; margin:16px 0 4px; flex-wrap:wrap;}
+  .pip{height:6px; flex:1 1 24px; border-radius:99px; background:var(--grid);}
   .pip.done{background:var(--series);}
   .pip.cur{background:var(--accent);}
   .railmeta{display:flex; justify-content:space-between; font-size:.78rem; color:var(--muted); margin-bottom:16px;}
@@ -67,7 +66,6 @@
   .statrow{display:flex; gap:22px; align-items:flex-end; margin:12px 0 4px;}
   .stat .k{font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
   .stat .v{font-size:2rem; font-weight:700; letter-spacing:-.02em; line-height:1.1;}
-  .stat .v small{font-size:.9rem; font-weight:600; color:var(--ink-2);}
 
   .know{margin:14px 0 4px;}
   .know h3{font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:0 0 8px;}
@@ -94,7 +92,6 @@
   .choice .desc{font-size:.78rem; color:var(--ink-2); margin-top:3px;}
   .choice:hover{border-color:var(--series);}
   .choice.sel{border-color:var(--series); background:var(--series-soft); box-shadow:0 0 0 3px var(--series-soft);}
-  html[data-theme="dark"] .choice.sel{background:var(--series-soft);}
   .choice .arrow{font-size:1.1rem;}
   .choice.up .arrow{color:var(--good);} .choice.down .arrow{color:var(--bad);} .choice.flat .arrow{color:var(--muted);}
 
@@ -116,13 +113,13 @@
   .reveal{margin-top:18px; border-top:1px dashed var(--border); padding-top:16px; display:none;}
   .reveal.show{display:block; animation:fade .35s ease;}
   @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
-  .verdict{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.02rem; margin-bottom:8px;}
+  .verdict{display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.02rem; margin-bottom:8px; flex-wrap:wrap;}
   .badge{display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:99px; font-size:.8rem; font-weight:700;}
   .badge.hit{color:#fff; background:var(--good);}
   .badge.miss{color:#fff; background:var(--bad);}
   .badge.flat{color:var(--page); background:var(--muted);}
   .movenum{font-variant-numeric:tabular-nums;}
-  .up-ink{color:var(--good-ink);} .down-ink{color:var(--bad);}
+  .up-ink{color:var(--good-ink);} .down-ink{color:var(--bad);} .flat-ink{color:var(--muted);}
   .lens{background:var(--surface-2); border-radius:10px; padding:13px 15px; margin-top:10px;}
   .lens .tag{font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
     color:var(--accent); margin-bottom:5px;}
@@ -141,23 +138,38 @@
     font-size:.76rem; padding:5px 8px; border-radius:6px; opacity:0; transition:opacity .1s; z-index:20;
     font-variant-numeric:tabular-nums; white-space:nowrap;}
 
-  /* instructor / end panels */
+  /* instructions / end panels */
   .panel{display:none;}
   .panel.show{display:block;}
   .note{background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent);
     border-radius:10px; padding:16px 18px; margin-bottom:14px;}
   .note h3{margin:0 0 8px; font-size:1rem;}
   .note p, .note li{font-size:.9rem; color:var(--ink-2);}
+  .note p{margin:0 0 8px;}
+  .divider{display:flex; align-items:center; gap:12px; margin:22px 0 14px; color:var(--muted);
+    font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;}
+  .divider::before,.divider::after{content:""; flex:1; height:1px; background:var(--border);}
+
+  /* DXY explainer image slot */
+  .infoimg{margin:16px auto 4px; text-align:center;}
+  .imgframe{max-width:860px; margin:0 auto;}
+  .imgframe img{width:100%; height:auto; display:block; border-radius:10px; border:1px solid var(--border);}
+  .imgph{display:flex; align-items:center; justify-content:center; text-align:center;
+    min-height:360px; width:100%; border:2px dashed var(--axis); border-radius:10px;
+    color:var(--muted); font-size:.9rem; padding:20px; background:var(--surface-2);}
+  .infoimg figcaption{font-size:.78rem; color:var(--muted); margin-top:6px;}
+
   .endgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:12px; margin:14px 0;}
   .kpi{background:var(--surface-2); border-radius:10px; padding:12px 14px; text-align:center;}
-  .kpi .n{font-size:1.7rem; font-weight:700; letter-spacing:-.02em;}
-  .kpi .l{font-size:.74rem; color:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
+  .kpi .n{font-size:1.6rem; font-weight:700; letter-spacing:-.02em;}
+  .kpi .l{font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
   table.summary{width:100%; border-collapse:collapse; font-size:.84rem; margin-top:8px;}
   table.summary th, table.summary td{text-align:left; padding:7px 8px; border-bottom:1px solid var(--border); vertical-align:top;}
   table.summary th{color:var(--muted); font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.03em;}
   table.summary td.dir{font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap;}
   .foot{font-size:.76rem; color:var(--muted); margin-top:24px; text-align:center;}
   a{color:var(--series);}
+  code{background:var(--surface-2); padding:1px 5px; border-radius:4px; font-size:.85em;}
 </style>
 </head>
 <body>
@@ -169,7 +181,7 @@
     </div>
     <div class="toolbtns">
       <span class="pill" id="saveStatus"></span>
-      <button class="ghost" id="instrBtn">Instructor guide</button>
+      <button class="ghost" id="instrBtn">Instructions</button>
       <button class="ghost" id="themeBtn">Dark</button>
     </div>
   </header>
@@ -177,43 +189,63 @@
   <!-- GAME PANEL -->
   <div class="panel show" id="gamePanel">
     <div class="rail" id="rail"></div>
-    <div class="railmeta"><span id="railLeft">Turn 1 of 12</span><span id="railRight">Correct calls: 0 / 0</span></div>
+    <div class="railmeta"><span id="railLeft">Turn 1</span><span id="railRight">Correct calls: 0 / 0</span></div>
     <div id="turnMount"></div>
   </div>
 
-  <!-- INSTRUCTOR PANEL -->
+  <!-- INSTRUCTIONS PANEL -->
   <div class="panel" id="instrPanel">
     <div class="note">
-      <h3>How to run this in class</h3>
-      <p>This is a <strong>historical replay</strong>: the market is frozen and you control the clock. Each turn shows students only what was known at that moment. They commit a direction on the dollar, <em>then</em> you reveal what actually happened and why. Because it's history, there's no live-data scramble and it runs identically every year.</p>
-      <p><strong>Suggested loop (5–7 min per turn):</strong></p>
+      <h3>What is the U.S. Dollar Index (DXY)?</h3>
+      <p>The <strong>U.S. Dollar Index (DXY)</strong> measures the value of the dollar against a basket of six major currencies — the <strong>euro</strong> (about 57.6% of the basket), the <strong>Japanese yen</strong>, the <strong>British pound</strong>, the <strong>Canadian dollar</strong>, the <strong>Swedish krona</strong>, and the <strong>Swiss franc</strong>. It's a single number that answers "is the dollar broadly getting stronger or weaker?"</p>
+      <p>When the index <strong>rises</strong>, the dollar is <em>appreciating</em> against those currencies (a dollar buys more foreign currency); when it <strong>falls</strong>, the dollar is <em>depreciating</em>. Because the euro dominates the basket, big DXY moves are often really euro moves in disguise. In this game you'll predict, month by month, whether the index went up or down — a <strong>Buy</strong> is a bet the dollar strengthens, a <strong>Sell</strong> is a bet it weakens.</p>
+      <figure class="infoimg">
+        <div class="imgframe">
+          <!-- ▶ PLUG YOUR DOLLAR INDEX IMAGE HERE:
+               Put an image file in your GitHub repo (e.g. dxy.png) and set src="dxy.png",
+               or paste a full image URL between the quotes below. -->
+          <img id="dxyImg" src="dxy-index.png" alt="U.S. Dollar Index"
+               onerror="this.style.display='none'; var p=document.getElementById('dxyPh'); if(p) p.style.display='flex';">
+          <div id="dxyPh" class="imgph" style="display:none">Your Dollar Index image goes here —<br>set the &lt;img&gt; <code>src</code> to your file (e.g. <code>src=&quot;dxy.png&quot;</code>) or an image URL.</div>
+        </div>
+        <figcaption>The U.S. Dollar Index (DXY) over time.</figcaption>
+      </figure>
+    </div>
+
+    <div class="note">
+      <h3>How to play</h3>
+      <p>Each turn is one month. Read the headlines that were known at the time, then commit your call:</p>
       <ul>
-        <li>Project the turn. Read the headlines aloud; give 60–90 seconds.</li>
-        <li>Students commit <strong>Long / Short / Flat</strong> — show of hands, clickers, or the button here — and one-line <em>why</em> tied to a model (UIP, PPP, monetary approach, BOP, risk premium).</li>
-        <li>Click <strong>Lock in &amp; reveal</strong>. Discuss: who was right, and was their <em>reasoning</em> right?</li>
-        <li>Advance. Do 3–4 turns per session, or the whole arc as a review before the final.</li>
+        <li><strong>Buy dollar</strong> — you expect the index to rise that month.</li>
+        <li><strong>Sell dollar</strong> — you expect the index to fall.</li>
+        <li><strong>Stay flat</strong> — you expect little change / you're hedging.</li>
       </ul>
-      <p><strong>Grade the reasoning, not the P&amp;L.</strong> A well-argued call that lost still earns credit; a lucky guess with no model doesn't. The self-scored tally here is just a hook — the learning is in the "why."</p>
+      <p>Add a one-line reason that names a model (interest parity, the monetary approach, the balance of payments, a risk premium). Then <strong>Lock in &amp; reveal</strong> to see what actually happened and why. Months where the dollar barely moved (under 0.4%) are shown as "≈ flat" and don't count for or against you.</p>
+    </div>
+
+    <div class="divider">For the instructor</div>
+
+    <div class="note">
+      <h3>Releasing the quiz in three parts</h3>
+      <p>The 24 months are split into three 8-turn batches. Near the top of this file's script you'll find three switches:</p>
+      <ul>
+        <li><code>const PART_1 = 1;</code> — Turns 1–8 · <strong>Jan–Aug 2024</strong> (the rate-differential era, ending with the August carry-trade crash)</li>
+        <li><code>const PART_2 = 0;</code> — Turns 9–16 · <strong>Sep 2024–Apr 2025</strong> (the Fed pivot, the election, the top, and the Liberation-Day tariff twist)</li>
+        <li><code>const PART_3 = 0;</code> — Turns 17–24 · <strong>May–Dec 2025</strong> (the record dollar slide and its late-year recovery)</li>
+      </ul>
+      <p>Set a switch to <code>1</code> to include that batch or <code>0</code> to hide it, then commit the file. Release Part 1 first, flip Part 2 to <code>1</code> later, then Part 3 — all from the same GitHub page, no second site needed. You can also turn on more than one at once.</p>
     </div>
     <div class="note">
-      <h3>Where it lands in your syllabus</h3>
-      <p>Turns 1–10 (2024) drill the <strong>asset &amp; monetary approaches</strong> — interest-rate differentials, UIP, expectations, the carry trade. Turns 11–12 (2025) set up <strong>Ch. 20 crises &amp; the group project</strong>: a crowded consensus unwinds, and tariffs move the dollar the "wrong" way — the capstone that the capital account, not the trade account, drives exchange rates.</p>
-    </div>
-    <div class="note">
-      <h3>A note on the numbers</h3>
-      <p>DXY figures are approximate month-end levels compiled from public reporting; a few second-half-2025 points are interpolated between verified anchors (end-2024 ≈ 108.5; Jun 30 2025 = 97.09; Sept 2025 bottom ≈ 96.5; Dec 31 2025 = 97.96). The teaching point is <em>direction and magnitude</em>, not the third decimal. Update any value to your preferred source in the <code>SERIES</code> / <code>TURNS</code> arrays in this file.</p>
+      <h3>How to run it in class</h3>
+      <p>It's a <strong>historical replay</strong>: the market is frozen and you control the clock. Project a turn, read the headlines, give students ~60–90 seconds to commit Buy / Sell / Flat with a one-line reason, then reveal. <strong>Grade the reasoning, not the P&amp;L</strong> — a well-argued call that lost still earns credit; a lucky guess with no model doesn't. The self-scored tally is just a hook.</p>
     </div>
     <div class="note">
       <h3>Collecting responses into a Google Sheet</h3>
-      <p>Every locked-in call saves a row — <em>time, name, turn, choice, actual move, correct?, and the typed rationale</em> — to a Google Sheet you own. One-time setup (~10 min):</p>
-      <ul>
-        <li>Create a Google Sheet (use your <strong>@wm.edu</strong> account).</li>
-        <li><strong>Extensions → Apps Script.</strong> Delete the sample, paste the <code>Code.gs</code> I sent, and Save.</li>
-        <li><strong>Deploy → New deployment → Web app.</strong> Set <em>Execute as: Me</em> and <em>Who has access: Anyone</em>, then Deploy and authorize.</li>
-        <li>Copy the <strong>Web app URL</strong> and paste it into <code>SHEET_ENDPOINT = "…"</code> near the top of this HTML file's script.</li>
-        <li>Commit the file to your GitHub Pages repo. Done — clicks now stream into the sheet; use <em>File → Download → Microsoft Excel</em> anytime.</li>
-      </ul>
-      <p><strong>W&amp;M Workspace caveat:</strong> if your @wm.edu account blocks "Anyone" access to web apps, either set access to "Anyone within William &amp; Mary" (students must be signed into their W&amp;M Google account) or host the script from a personal Gmail account. The indicator top-right shows <em>Saved ✓</em> / <em>Save failed ✗</em> so you can confirm it's working. The <em>Export my responses (CSV)</em> button on the final screen is a backup if the sheet isn't connected.</p>
+      <p>Every locked-in call saves a row — <em>time, name, turn, choice, actual move, correct?, and the typed rationale</em> — to a Google Sheet you own. Paste your Apps Script Web-app URL into <code>SHEET_ENDPOINT</code> near the top of the script (full steps are in the setup guide I sent). The indicator top-right shows <em>Saved ✓</em> / <em>Save failed ✗</em>; the <em>Export CSV</em> button on the final screen is a backup.</p>
+    </div>
+    <div class="note">
+      <h3>A note on the numbers</h3>
+      <p>DXY figures are approximate month-end levels from public reporting. The 2024 path and the 2025 anchors (peak ≈110 in Jan; −10.8% H1; Sept low ≈96.5; five-month high ≈100 in Nov; Dec 31 2025 = 97.96) are well documented; a few in-between second-half-2025 months are interpolated. The teaching point is <em>direction and magnitude</em>, not the third decimal. Every value lives in the editable <code>SERIES</code> array — scoring updates automatically if you change one.</p>
     </div>
     <div class="nav"><button class="primary" id="backToGame">Back to the game</button></div>
   </div>
@@ -223,203 +255,214 @@
 <div class="tip" id="tip"></div>
 
 <script>
+/* ======================================================================
+   RELEASE SWITCHES — set each to 1 (show) or 0 (hide), then commit.
+   Part 1 = Turns 1–8  (Jan–Aug 2024)
+   Part 2 = Turns 9–16 (Sep 2024 – Apr 2025)
+   Part 3 = Turns 17–24 (May–Dec 2025)
+   ====================================================================== */
+const PART_1 = 1;
+const PART_2 = 0;
+const PART_3 = 0;
+
+/* ======================================================================
+   COLLECTING RESPONSES — paste your Google Sheet Web-app URL below.
+   Leave "" to run with NO saving (works fine, local only).
+   ====================================================================== */
+const SHEET_ENDPOINT = "";   // e.g. "https://script.google.com/macros/s/AKfy...../exec"
+
 /* ---------- DXY monthly series (approx month-end) ---------- */
 const SERIES = [
   {m:"Dec '23",v:101.3},{m:"Jan '24",v:103.3},{m:"Feb '24",v:104.2},{m:"Mar '24",v:104.5},
   {m:"Apr '24",v:106.2},{m:"May '24",v:104.6},{m:"Jun '24",v:105.9},{m:"Jul '24",v:104.1},
   {m:"Aug '24",v:101.7},{m:"Sep '24",v:100.8},{m:"Oct '24",v:104.0},{m:"Nov '24",v:105.7},
   {m:"Dec '24",v:108.5},{m:"Jan '25",v:108.4},{m:"Feb '25",v:107.6},{m:"Mar '25",v:104.2},
-  {m:"Apr '25",v:99.5},{m:"May '25",v:99.4},{m:"Jun '25",v:97.1},{m:"Jul '25",v:98.6},
-  {m:"Aug '25",v:97.9},{m:"Sep '25",v:96.8},{m:"Oct '25",v:99.1},{m:"Nov '25",v:99.0},{m:"Dec '25",v:97.96}
+  {m:"Apr '25",v:99.5},{m:"May '25",v:99.4},{m:"Jun '25",v:97.1},{m:"Jul '25",v:98.9},
+  {m:"Aug '25",v:97.8},{m:"Sep '25",v:96.9},{m:"Oct '25",v:98.8},{m:"Nov '25",v:99.9},{m:"Dec '25",v:97.96}
 ];
 
-/* ---------- The 12 turns ---------- */
-/* dir: "UP" = dollar strengthens (DXY rises), "DOWN" = dollar weakens */
+/* ---------- The 24 turns (one per month) ----------
+   part: which release batch. knownIdx = prior month close you see now.
+   outIdx = the month you're predicting. Direction/scoring derive from SERIES. */
+const P1="Part 1 · 2024 (Jan–Aug)", P2="Part 2 · Sep '24 – Apr '25", P3="Part 3 · 2025 (May–Dec)";
 const TURNS = [
-  {
-    phase:"Part I · Exchange-rate determination",
-    date:"Late January 2024", knownIdx:1, outIdx:3,
-    level:"103.3", horizon:"Where is the dollar by the end of March?",
-    know:[
-      "The Fed is holding at 5.25–5.50% — the highest in over two decades — and keeps saying \"higher for longer.\"",
-      "The U.S. economy refuses to slow: strong jobs, sticky ~3–4% inflation. Markets keep pushing back their bets on the first rate cut.",
-      "The dollar has firmed from ~101 at the end of 2023 to 103.3."
-    ],
-    tag:"Asset approach · UIP",
-    lens:"The dollar rose to ~104.5. With the Fed on hold and cut-hopes fading, the expected U.S. interest-rate path stayed high relative to abroad. By uncovered interest parity, a higher relative return on dollar assets — with no offsetting expected depreciation — pulls capital in and lifts the dollar.",
-    teach:["Tie to the asset approach: today's spot rate reacts to the <em>expected future path</em> of relative interest rates, not just today's level.","Ask: what would have to change abroad (ECB/BoJ) to flip this?"]
-  },
-  {
-    phase:"Part I · Exchange-rate determination",
-    date:"End of March 2024", knownIdx:3, outIdx:4,
-    level:"104.5", horizon:"Dollar direction into late April?",
-    know:[
-      "The Bank of Japan just exited negative interest rates (its first hike since 2007) — yet the yen keeps sliding toward 150+.",
-      "U.S. disinflation is stalling; each new CPI print comes in hot.",
-      "Cut expectations for the Fed are being pared back again."
-    ],
-    tag:"Monetary approach · expectations",
-    lens:"The dollar jumped to ~106.2. Hot U.S. inflation data meant markets priced <em>fewer, later</em> Fed cuts — a higher expected rate path — so the dollar climbed. And despite the BoJ's historic hike, the still-enormous U.S.–Japan rate gap kept the yen weak (it hit ~160, prompting Japanese intervention).",
-    teach:["Great illustration that a rate <em>hike abroad</em> needn't strengthen that currency if the differential is still huge.","Connect to the monetary approach: inflation surprises move the expected policy path, which moves the exchange rate now."]
-  },
-  {
-    phase:"Part I · Exchange-rate determination",
-    date:"End of April 2024", knownIdx:4, outIdx:5,
-    level:"106.2", horizon:"Can the dollar hold its highs into May?",
-    know:[
-      "The dollar sits near its year-to-date high; the yen hit ~160 and Japan's Ministry of Finance intervened to prop it up.",
-      "Positioning is heavily long-dollar — almost everyone is on the same side.",
-      "Watch the next round of U.S. CPI and jobs data."
-    ],
-    tag:"Data-driven repricing · mean reversion",
-    lens:"The dollar slipped to ~104.6. Softer April inflation and a cooler jobs report revived hopes of Fed cuts, trimming the expected rate path. After an overshoot and with a very crowded long-dollar trade, the pullback was sharp — a reminder that FX overshoots and then reverts as new data arrives.",
-    teach:["Introduce overshooting: prices jump on news, then partially unwind.","Note the role of crowded positioning — when everyone is long, surprises hurt more."]
-  },
-  {
-    phase:"Part II · Balance of payments",
-    date:"End of May 2024", knownIdx:5, outIdx:6,
-    level:"104.6", horizon:"Dollar vs. euro into late June?",
-    know:[
-      "The European Central Bank is set to cut rates on June 6 — likely <em>before</em> the Fed.",
-      "French political turmoil (a snap election) is raising Europe's risk premium.",
-      "U.S. data has steadied; the Fed is still on hold."
-    ],
-    tag:"Relative monetary policy · risk premium",
-    lens:"The dollar rose to ~105.9. The ECB cut first, widening the rate differential in the dollar's favor, and French political risk pushed investors out of the euro. Since the euro is ~58% of DXY, a weaker euro mechanically lifts the index.",
-    teach:["Reinforce that DXY is a euro-heavy basket — \"dollar strength\" is often \"euro weakness.\"","Relative policy: it's the <em>gap</em> between central banks that matters, not either one alone."]
-  },
-  {
-    phase:"Part II · Balance of payments",
-    date:"End of June 2024", knownIdx:6, outIdx:7,
-    level:"105.9", horizon:"Dollar direction through July?",
-    know:[
-      "June U.S. inflation is finally cooling; markets now lean toward a September Fed cut.",
-      "The yen carry trade is enormous — investors borrow cheap yen to buy higher-yielding assets.",
-      "Chatter grows that the BoJ may hike again in late July."
-    ],
-    tag:"Expected easing · carry setup",
-    lens:"The dollar eased to ~104.1. Cooler inflation pulled forward expected Fed cuts, softening the dollar. Beneath the surface, the yen began to firm as a BoJ hike loomed — the first tremor before the carry-trade earthquake in August.",
-    teach:["Set up the carry trade: borrow low-yield (yen), invest high-yield (dollar). Ask what happens if that gap narrows suddenly.","Foreshadow: what could force a fast unwind?"]
-  },
-  {
-    phase:"Part III · Fixed/floating & crises",
-    date:"Late July 2024", knownIdx:7, outIdx:8,
-    level:"104.1", horizon:"Dollar into early/mid August?",
-    know:[
-      "The BoJ hiked again on July 31; the yen is strengthening fast.",
-      "The Fed held but all but promised a September cut — the U.S.–Japan gap is set to narrow from both ends.",
-      "A weak U.S. jobs report just landed (Aug 2), stoking recession fears."
-    ],
-    tag:"Carry unwind · UIP in reverse · risk-off",
-    lens:"The dollar plunged toward ~101 (and briefly ~100.5). The narrowing rate gap made the yen carry trade unprofitable; a stampede to buy back yen and cut risk (the Aug 5 global sell-off, VIX spiking) sent the yen soaring and the dollar down. This is UIP working violently in reverse.",
-    teach:["Marquee turn. Walk through the mechanics of an unwind: everyone exits the same trade at once.","Link to speculative dynamics you'll formalize in Ch. 20 — self-reinforcing capital flows."]
-  },
-  {
-    phase:"Part III · Fixed/floating & crises",
-    date:"End of August 2024", knownIdx:8, outIdx:9,
-    level:"101.7", horizon:"How much lower can the dollar go in September?",
-    know:[
-      "Markets are now pricing aggressive Fed easing; some expect a 50bp cut.",
-      "At Jackson Hole, Powell signaled \"the time has come\" to cut.",
-      "The dollar has already fallen a long way from its April highs."
-    ],
-    tag:"Expectations already priced",
-    lens:"The dollar barely moved — down to ~100.8. The Fed did deliver a jumbo 50bp cut on Sept 18, but markets had already priced it in, so the <em>actual</em> event moved the dollar very little. The lesson: exchange rates respond to <em>surprises</em> relative to expectations, not to events everyone already saw coming.",
-    teach:["The efficient-markets point: \"buy the rumor, sell the fact.\" A big, expected cut ≠ a big move.","Contrast with Turn 10, where the surprise is what moves the dollar."]
-  },
-  {
-    phase:"Part III · Fixed/floating & crises",
-    date:"End of September 2024", knownIdx:9, outIdx:10,
-    level:"100.8", horizon:"Dollar direction through October?",
-    know:[
-      "The dollar is at its 2024 low; the Fed has just begun cutting.",
-      "The U.S. election (Nov 5) is five weeks out and tightening.",
-      "Incoming data (jobs, spending) is starting to surprise to the upside."
-    ],
-    tag:"Growth surprise · repricing",
-    lens:"The dollar rallied hard to ~104. A blowout September jobs report (released Oct 4) killed the \"hard landing\" story, so markets pared back how many cuts the Fed would deliver — repricing the rate path <em>up</em>. A building \"election trade\" added fuel.",
-    teach:["Good data can strengthen a currency even mid-cutting-cycle: fewer expected cuts = higher expected path.","Introduce the idea of a political risk/expectations premium ahead of an election."]
-  },
-  {
-    phase:"Part III · Fixed/floating & crises",
-    date:"End of October 2024", knownIdx:10, outIdx:11,
-    level:"104.0", horizon:"Where does the election take the dollar in November?",
-    know:[
-      "The U.S. presidential election is on Nov 5 and too close to call.",
-      "One outcome is associated with tariffs, tax cuts, and larger deficits.",
-      "The Fed is expected to cut again on Nov 7."
-    ],
-    tag:"Fiscal/tariff reflation · policy expectations",
-    lens:"The dollar spiked to ~107 after the Nov 5 result, then settled near 105.7. Markets read the election as meaning tariffs + fiscal expansion → higher inflation and a higher expected rate path → a stronger dollar (the \"reflation trade\"). A Fed cut on Nov 7 barely dented it.",
-    teach:["Policy expectations move FX before any policy is enacted.","Preview the paradox for Turn 12: markets initially <em>bought</em> the dollar on tariffs. Do tariffs really strengthen a currency?"]
-  },
-  {
-    phase:"Part III · Fixed/floating & crises",
-    date:"End of November 2024", knownIdx:11, outIdx:12,
-    level:"105.7", horizon:"Dollar direction into year-end?",
-    know:[
-      "The Fed is widely expected to cut 25bp on Dec 18 — that part looks priced in.",
-      "The real question is the Fed's <em>guidance</em> for 2025 (the \"dot plot\").",
-      "The dollar is already strong on the reflation trade."
-    ],
-    tag:"Hawkish surprise · guidance",
-    lens:"The dollar surged to ~108.5 — a two-year high. The Fed cut as expected but signaled <em>fewer</em> cuts in 2025 than markets wanted (a hawkish dot plot). It's the change in the expected <em>path</em>, not the cut itself, that moved the dollar.",
-    teach:["Pair with Turn 7: same action (a cut), opposite dollar reaction — because one was a dovish surprise-that-wasn't and this was a hawkish surprise.","Emphasize forward guidance as a policy tool."]
-  },
-  {
-    phase:"2025 · The turn",
-    date:"Late January 2025", knownIdx:13, outIdx:15,
-    level:"≈109", horizon:"The dollar peaked near 110 and everyone is bullish. Where is it by end of March?",
-    know:[
-      "The dollar spiked toward ~110 in mid-January; sentiment and positioning are overwhelmingly long-dollar.",
-      "A new administration takes office Jan 20 promising aggressive tariffs — seen as dollar-positive.",
-      "Almost every bank forecast calls for continued dollar strength (\"parity with the euro\")."
-    ],
-    tag:"Crowded consensus · relative growth shift",
-    lens:"The dollar fell to ~104.2 by end-March. The consensus long-dollar trade was exhausted, and the ground shifted abroad: in early March, Europe announced a massive fiscal expansion (German debt-brake reform, defense spending), lifting the euro and European growth expectations. When everyone already owns the trade, there's no one left to buy.",
-    teach:["Positioning matters: a maximally crowded trade is fragile.","Relative growth/fiscal outlook can dominate rate differentials — the driver rotated from \"U.S. exceptionalism\" to \"rest-of-world catches up.\""]
-  },
-  {
-    phase:"2025 · The capstone",
-    date:"Early April 2025", knownIdx:15, outIdx:24,
-    level:"104.2", horizon:"Sweeping \"Liberation Day\" tariffs drop April 2. Textbook says tariffs cut imports and help the currency — so where does the dollar go for the rest of 2025?",
-    know:[
-      "On April 2, the U.S. announces broad \"reciprocal\" tariffs — a ~10% baseline on nearly all imports, higher on many countries.",
-      "Standard trade intuition: fewer imports → improved trade balance → <em>stronger</em> dollar.",
-      "But U.S. stocks are wobbling and foreign investors are questioning U.S. policy credibility."
-    ],
-    tag:"THE TWIST · capital account beats trade account",
-    lens:"The dollar <em>plunged</em> — through 100, bottoming near 96.5 by September, ending 2025 at 97.96 (its worst year since 1973). The textbook trade-balance channel was swamped by the capital account: U.S. stocks, bonds, AND the dollar sold off together as investors repriced U.S. policy risk and questioned the dollar's safe-haven status. Money flowed to the euro, franc, and gold. Exchange rates are set in asset markets — confidence and capital flows, not just the trade balance.",
-    teach:["The payoff of the whole game: the asset/capital-account view of exchange rates beats the flows/trade view. A \"pro-trade-balance\" policy tanked the currency.","The rare triple sell-off (equities + bonds + FX) is a hallmark of a confidence/risk-premium shock — perfect fuel for the Ch. 20 crisis unit and the group project.","Ask students to find another episode (e.g., an EM) where policy credibility, not fundamentals, moved the currency."]
-  }
+  /* ---------------- PART 1 ---------------- */
+  { part:1, phase:P1, date:"January 2024", knownIdx:0, outIdx:1,
+    horizon:"The Fed just held; markets are betting on ~6 cuts in 2024. Where does the dollar close in January?",
+    know:["The Fed held at 5.25–5.50% in December but hinted at cuts; markets ran with it and priced ~6 cuts for 2024.","The economy is still strong — solid jobs, spending holding up.","The dollar starts the year near 101."],
+    tag:"Asset approach · repricing cuts",
+    lens:"The dollar rose. Strong early-2024 data forced markets to walk back those aggressive cut bets, so the expected U.S. rate path stayed high. By uncovered interest parity, a higher relative return on dollar assets pulls capital in and lifts the dollar.",
+    teach:["Today's spot rate reacts to the <em>expected future path</em> of rates, not just today's level.","Over-optimistic cut pricing is fuel for a dollar bounce when it's unwound."] },
+  { part:1, phase:P1, date:"February 2024", knownIdx:1, outIdx:2,
+    horizon:"January data ran hot. Dollar direction in February?",
+    know:["A blowout January jobs report and a hot January CPI (released in Feb).","\"Higher for longer\" is back in the market's vocabulary.","Cut expectations keep getting pared."],
+    tag:"Monetary approach · hot data",
+    lens:"The dollar climbed. Hot inflation and jobs data pushed the first expected cut further out — a higher expected rate path — which lifts the dollar through the monetary/expectations channel.",
+    teach:["Inflation surprises move the expected policy path, which moves the exchange rate <em>now</em>."] },
+  { part:1, phase:P1, date:"March 2024", knownIdx:2, outIdx:3,
+    horizon:"FOMC meets and the BoJ is expected to move. Dollar in March?",
+    know:["The Fed holds; its \"dot plot\" still pencils in 3 cuts for 2024 — roughly as expected.","The Bank of Japan exits negative interest rates on March 19 (first hike since 2007).","Yet the yen stays weak, near 150+."],
+    tag:"No surprise · differential dominates",
+    lens:"The dollar was roughly flat. The Fed delivered no surprise, and the BoJ's historic hike didn't help the yen because the U.S.–Japan rate gap was still enormous. With little new information, little net move.",
+    teach:["A rate hike abroad needn't strengthen that currency if the differential stays wide.","No surprise vs. expectations → no big FX move."] },
+  { part:1, phase:P1, date:"April 2024", knownIdx:3, outIdx:4,
+    horizon:"A third straight hot inflation print lands mid-month. Dollar in April?",
+    know:["March CPI (released ~April 10) is hot again — the third in a row.","Markets capitulate on near-term Fed cuts.","The yen slides toward 160; Japan hints at intervention."],
+    tag:"Inflation surprise · overshoot",
+    lens:"The dollar jumped to its year-to-date high. Persistent inflation pushed the first Fed cut far out, widening the expected-rate gap and driving the dollar up sharply. The yen weakened to ~160, prompting Japanese intervention.",
+    teach:["Repeated surprises in the same direction compound into a large trend move.","Set up mean reversion: how far can an overshoot run?"] },
+  { part:1, phase:P1, date:"May 2024", knownIdx:4, outIdx:5,
+    horizon:"Japan intervened and data is cooling. Dollar in May?",
+    know:["Japan's Ministry of Finance intervened (late April / May 1) to prop up the yen.","April CPI comes in softer; jobs growth cools.","Positioning is heavily long-dollar."],
+    tag:"Data cools · mean reversion",
+    lens:"The dollar eased. Softer data revived hopes of Fed cuts and the April overshoot partly unwound; intervention capped the yen. A crowded long-dollar trade makes such pullbacks sharper.",
+    teach:["Overshooting then reverting as new data arrives is a core FX pattern."] },
+  { part:1, phase:P1, date:"June 2024", knownIdx:5, outIdx:6,
+    horizon:"The ECB is set to cut before the Fed. Dollar vs. the euro in June?",
+    know:["The European Central Bank cuts on June 6 — ahead of the Fed.","A French snap election adds political risk in Europe.","The U.S. Fed is still on hold."],
+    tag:"Relative policy · euro weakness",
+    lens:"The dollar rose. The ECB easing first widened the rate differential in the dollar's favor, and French political risk pushed money out of the euro. Since the euro is ~58% of DXY, euro weakness mechanically lifts the index.",
+    teach:["\"Dollar strength\" is often \"euro weakness\" — mind the basket weights.","It's the gap between central banks that matters, not either one alone."] },
+  { part:1, phase:P1, date:"July 2024", knownIdx:6, outIdx:7,
+    horizon:"June inflation finally cools. Dollar in July?",
+    know:["June CPI (July 11) is cool — a September Fed cut now looks likely.","Talk grows that the BoJ will hike again in late July.","The yen begins to firm off its lows."],
+    tag:"Cut pulled forward · carry setup",
+    lens:"The dollar fell. Cooler inflation pulled the expected Fed cut forward, and the yen firmed as a BoJ hike loomed — the first tremor before the carry-trade unwind.",
+    teach:["Foreshadow the carry trade: borrow cheap yen, buy higher-yield dollars. What if that gap suddenly narrows?"] },
+  { part:1, phase:P1, date:"August 2024", knownIdx:7, outIdx:8,
+    horizon:"The BoJ hiked July 31 and a weak U.S. jobs report just hit. Dollar in August?",
+    know:["The BoJ hiked again on July 31; the yen is strengthening fast.","A weak U.S. jobs report (Aug 2) sparks recession fears.","The Fed all but promises a September cut — the rate gap narrows from both ends."],
+    tag:"Carry unwind · UIP in reverse",
+    lens:"The dollar plunged. The narrowing U.S.–Japan gap made the yen carry trade unprofitable; the August 5 global sell-off and a stampede to buy back yen sent the dollar sharply lower. This is uncovered interest parity working violently in reverse.",
+    teach:["Walk through an unwind: everyone exits the same crowded trade at once.","Links to the self-reinforcing capital flows you'll formalize in the crisis unit."] },
+
+  /* ---------------- PART 2 ---------------- */
+  { part:2, phase:P2, date:"September 2024", knownIdx:8, outIdx:9,
+    horizon:"Markets expect a jumbo cut. Dollar in September?",
+    know:["Markets are pricing aggressive Fed easing; a 50bp cut is expected Sep 18.","At Jackson Hole, Powell said \"the time has come\" to cut.","The dollar has already fallen a long way from its April highs."],
+    tag:"Priced-in cut",
+    lens:"The dollar barely moved, drifting to a year-to-date low. The Fed did deliver a jumbo 50bp cut, but markets had already priced it, so the event itself did little. Rates react to <em>surprises</em> vs. expectations, not to events everyone saw coming.",
+    teach:["\"Buy the rumor, sell the fact.\" A big, expected cut ≠ a big move."] },
+  { part:2, phase:P2, date:"October 2024", knownIdx:9, outIdx:10,
+    horizon:"A blowout jobs report lands Oct 4. Dollar in October?",
+    know:["The September jobs report (Oct 4) is a blowout — the \"hard landing\" story dies.","The U.S. election is four weeks away and tightening.","Markets start pricing fewer Fed cuts."],
+    tag:"Growth surprise · fewer cuts",
+    lens:"The dollar rallied hard. Strong data killed the hard-landing narrative, so markets pared how many cuts the Fed would deliver — repricing the rate path up — and an election risk premium began to build.",
+    teach:["Good data can strengthen a currency mid-cutting-cycle: fewer expected cuts = higher path."] },
+  { part:2, phase:P2, date:"November 2024", knownIdx:10, outIdx:11,
+    horizon:"Election on Nov 5, Fed cut on Nov 7. Dollar in November?",
+    know:["The U.S. presidential election is Nov 5 and too close to call.","One outcome is associated with tariffs, tax cuts, and bigger deficits.","The Fed is expected to cut 25bp on Nov 7."],
+    tag:"Reflation trade · policy expectations",
+    lens:"The dollar spiked after the result (toward ~107) then settled higher. Markets read the outcome as tariffs + fiscal expansion → higher inflation and a higher expected rate path → a stronger dollar. A Fed cut two days later barely dented it.",
+    teach:["Policy expectations move FX before any policy is enacted.","Preview the paradox: markets initially <em>bought</em> the dollar on tariffs — do tariffs really strengthen a currency?"] },
+  { part:2, phase:P2, date:"December 2024", knownIdx:11, outIdx:12,
+    horizon:"A 25bp cut looks certain; the 2025 guidance is the real question. Dollar in December?",
+    know:["A 25bp cut on Dec 18 is essentially priced in.","The real question is the Fed's 2025 \"dot plot.\"","The dollar is already strong on the reflation trade."],
+    tag:"Hawkish guidance",
+    lens:"The dollar surged to a two-year high. The Fed cut as expected but signaled <em>fewer</em> cuts in 2025 than markets wanted — a hawkish dot plot. It's the change in the expected path, not the cut itself, that moved the dollar.",
+    teach:["Same action (a cut), opposite reaction to September — because this was a hawkish surprise.","Forward guidance is itself a policy tool."] },
+  { part:2, phase:P2, date:"January 2025", knownIdx:12, outIdx:13,
+    horizon:"The dollar spikes near 110 and everyone is bullish. Dollar by end of January?",
+    know:["A new administration is inaugurated Jan 20 with aggressive tariff plans — seen as dollar-positive.","The index spikes toward 110 mid-month; positioning is overwhelmingly long-dollar.","Nearly every bank forecast calls for more dollar strength."],
+    tag:"Crowded top",
+    lens:"The dollar peaked near 110, then faded to roughly flat on the month. With everyone already long and the bullish news in the price, there was little left to buy — the top was forming.",
+    teach:["A maximally crowded trade is fragile: no marginal buyer left."] },
+  { part:2, phase:P2, date:"February 2025", knownIdx:13, outIdx:14,
+    horizon:"On-again/off-again tariff threats. Dollar in February?",
+    know:["Tariff threats come and go, creating policy uncertainty.","Some U.S. data softens.","The consensus long-dollar trade starts to wobble."],
+    tag:"Consensus wobbles",
+    lens:"The dollar slipped. Policy uncertainty and a crowded long position began to unwind; the \"U.S. exceptionalism\" trade lost momentum.",
+    teach:["Uncertainty itself can command a risk premium and weigh on a currency."] },
+  { part:2, phase:P2, date:"March 2025", knownIdx:14, outIdx:15,
+    horizon:"Europe announces a huge fiscal package. Dollar in March?",
+    know:["Germany moves to reform its \"debt brake\" and boost defense/infrastructure spending — a major fiscal shift.","The euro surges on stronger European growth expectations.","U.S. growth worries build."],
+    tag:"Relative growth shifts abroad",
+    lens:"The dollar dropped. The growth-and-fiscal story rotated toward Europe; a stronger euro and brighter EU outlook pulled DXY down. Relative fundamentals, not just rate gaps, drive the currency.",
+    teach:["The driver rotated from \"U.S. exceptionalism\" to \"rest-of-world catches up.\""] },
+  { part:2, phase:P2, date:"April 2025", knownIdx:15, outIdx:16,
+    horizon:"Sweeping \"Liberation Day\" tariffs drop April 2. Textbook says tariffs help the currency — so where does the dollar go?",
+    know:["On April 2, the U.S. announces broad \"reciprocal\" tariffs — a ~10% baseline on nearly all imports.","Standard trade intuition: fewer imports → improved trade balance → a <em>stronger</em> dollar.","But U.S. stocks wobble and foreign investors question U.S. policy credibility."],
+    tag:"THE TWIST · capital account rules",
+    lens:"The dollar plunged below 100. Instead of the trade-balance channel, the capital account ruled: U.S. stocks, bonds, AND the dollar sold off together as investors repriced U.S. policy risk and the dollar's safe-haven status. Money fled to the euro, franc, and gold. Exchange rates are set in asset markets — confidence and capital flows, not just the trade balance.",
+    teach:["The payoff: the asset/capital-account view beats the trade-flow view. A \"pro-trade-balance\" policy tanked the currency.","A rare triple sell-off (equities + bonds + FX) signals a confidence/risk-premium shock — fuel for the crisis unit and the group project."] },
+
+  /* ---------------- PART 3 ---------------- */
+  { part:3, phase:P3, date:"May 2025", knownIdx:16, outIdx:17,
+    horizon:"After the April shock, tariff talks begin. Dollar in May?",
+    know:["Some tariffs are paused and negotiations open.","Markets steady at a low level after April's plunge.","Confidence in U.S. assets is still shaken."],
+    tag:"Stabilizing at the lows",
+    lens:"The dollar was roughly flat. The panic eased but confidence didn't return; the dollar stabilized near its new, lower range rather than rebounding.",
+    teach:["A shock can reset the level without an immediate recovery — the risk premium lingers."] },
+  { part:3, phase:P3, date:"June 2025", knownIdx:17, outIdx:18,
+    horizon:"The slide isn't over. Dollar in June?",
+    know:["Erosion continues as doubts about U.S. policy persist.","Capital keeps rotating toward the euro, Swiss franc, and gold.","This will cap six straight monthly declines."],
+    tag:"Worst H1 since 1973",
+    lens:"The dollar fell again to about 97, completing its worst first half since 1973 (down ~10.8%). Steady capital outflows, not a single event, did the damage.",
+    teach:["Sustained capital-account pressure can grind a currency lower for months."] },
+  { part:3, phase:P3, date:"July 2025", knownIdx:18, outIdx:19,
+    horizon:"The dollar is deeply oversold. Dollar in July?",
+    know:["The dollar is heavily shorted and oversold after six down months.","A few trade agreements get struck.","Risk appetite improves."],
+    tag:"Oversold bounce",
+    lens:"The dollar bounced — its first up month in a while. An oversold, heavily-short position plus some trade deals sparked a relief rally. Even in a downtrend, positioning extremes produce counter-moves.",
+    teach:["Crowded shorts unwind just like crowded longs — mind positioning, not just fundamentals."] },
+  { part:3, phase:P3, date:"August 2025", knownIdx:19, outIdx:20,
+    horizon:"Softer data lifts cut expectations. Dollar in August?",
+    know:["U.S. data softens; markets raise the odds of a September Fed cut.","Powell sounds dovish at Jackson Hole.","The bounce loses steam."],
+    tag:"Cut expectations build",
+    lens:"The dollar slipped. Rising odds of a September cut trimmed the expected rate path, and the relief rally faded.",
+    teach:["Expected easing weighs on a currency before the cut arrives."] },
+  { part:3, phase:P3, date:"September 2025", knownIdx:20, outIdx:21,
+    horizon:"The Fed makes its first cut of 2025. Dollar in September?",
+    know:["The Fed cuts on Sep 17 — its first cut of 2025 — amid a softening economy.","Growth concerns persist.","The dollar is near its lows for the year."],
+    tag:"Fed resumes cutting · year low",
+    lens:"The dollar fell to its 2025 low (around 96.5 intramonth). A lower expected path plus a soft economy weighed on it — a rare case in this game where the actual cut still pressured the dollar, because it came alongside genuinely weak data.",
+    teach:["Contrast with December 2024: a cut can strengthen or weaken the dollar depending on the guidance and the growth backdrop."] },
+  { part:3, phase:P3, date:"October 2025", knownIdx:21, outIdx:22,
+    horizon:"The Fed cuts again but Powell hedges on December. Dollar in October?",
+    know:["The Fed cuts again on Oct 29.","Powell casts doubt on a December cut.","Risk appetite is steadier."],
+    tag:"Hawkish cut · rebound",
+    lens:"The dollar rebounded. A \"hawkish cut\" — the Fed easing while signaling fewer cuts ahead — lifted the expected path even as policy loosened.",
+    teach:["It's the guidance around the cut, not the cut, that set the direction — again."] },
+  { part:3, phase:P3, date:"November 2025", knownIdx:22, outIdx:23,
+    horizon:"December-cut bets swing around. Dollar in November?",
+    know:["Conviction on a near-term December cut fades and firms repeatedly.","The dollar pushes toward a five-month high near 100.","Risk appetite is supportive."],
+    tag:"Five-month high near 100",
+    lens:"The dollar rose to a five-month high near 100. Fading conviction on imminent cuts and steadier markets supported it — the sharpest part of the recovery from the spring lows.",
+    teach:["Shifting rate-cut odds move the dollar week to week even without a policy change."] },
+  { part:3, phase:P3, date:"December 2025", knownIdx:23, outIdx:24,
+    horizon:"The Fed cuts a third time to close the year. Dollar in December?",
+    know:["The Fed cuts a third time on Dec 10.","The year winds down with a soft-dollar backdrop.","The dollar sits just below 100."],
+    tag:"Cut #3 · year closes down ~10%",
+    lens:"The dollar drifted lower into year-end, closing at 97.96 — down about 10% for 2025, its worst year since 1973. The Fed's third cut and a still-soft dollar backdrop capped the recovery.",
+    teach:["Zoom out: a year defined by a confidence shock in the capital account, not by the trade balance."] },
 ];
 
-/* ======================================================================
-   COLLECTING RESPONSES INTO A GOOGLE SHEET
-   Paste your Google Apps Script Web-App URL between the quotes below.
-   Leave it "" to run the game with NO saving (works fine, local only).
-   Step-by-step: click "Instructor guide" in the app, or read SETUP.
-   ====================================================================== */
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzTJU184AJ8NP66no-X9ebMDN8vGKiUsBGVl_-hHvhUCmavOFaUKZjquiG9T4Sf9pg/exec";   // e.g. "https://script.google.com/macros/s/AKfy...../exec"
+/* ---------- active turns from the release switches ---------- */
+const PART_ON = {1:PART_1===1, 2:PART_2===1, 3:PART_3===1};
+const ACTIVE = TURNS.filter(t => PART_ON[t.part]);
+const FLAT_TOL = 0.4; // % move under which a month counts as "flat" (not scored)
 
 /* ---------- state ---------- */
 let cur = 0;
-let view = 'gate';                                   // 'gate' | 'game' | 'end'
-const answers = new Array(TURNS.length).fill(null);  // {choice, correct}
+let view = 'gate';
+const answers = new Array(ACTIVE.length).fill(null);
 const player = { name:'', session:'' };
-const allRows = [];                                  // every logged row, for CSV fallback
+const allRows = [];
 const tip = document.getElementById('tip');
+const fmt = v => v.toFixed(1);
 
 function genSession(){ return 'S'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
 
+function moveOf(t){
+  const s=SERIES[t.knownIdx].v, e=SERIES[t.outIdx].v;
+  const pct=(e-s)/s*100;
+  return { s, e, pct, dir: e>s?'UP':'DOWN', flat: Math.abs(pct)<FLAT_TOL };
+}
+
 function setSaveStatus(state){
   const el=document.getElementById('saveStatus'); if(!el) return;
-  const map={
-    local:['◦ Local only (no sheet)','var(--muted)'],
-    saving:['⤴ Saving…','var(--muted)'],
-    ok:['✓ Saved','var(--good)'],
-    err:['✗ Save failed','var(--bad)']
-  };
+  const map={ local:['◦ Local only (no sheet)','var(--muted)'], saving:['⤴ Saving…','var(--muted)'],
+    ok:['✓ Saved','var(--good)'], err:['✗ Save failed','var(--bad)'] };
   const m=map[state]; if(!m){ el.style.display='none'; return; }
   el.textContent=m[0]; el.style.color=m[1]; el.style.display='inline-flex';
 }
@@ -428,15 +471,13 @@ function logResponse(row){
   allRows.push(row);
   if(!SHEET_ENDPOINT){ setSaveStatus('local'); return; }
   setSaveStatus('saving');
-  fetch(SHEET_ENDPOINT,{
-    method:'POST', mode:'no-cors',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},   // text/plain avoids a CORS preflight
-    body: JSON.stringify(row)
-  }).then(()=>setSaveStatus('ok')).catch(()=>setSaveStatus('err'));
+  fetch(SHEET_ENDPOINT,{ method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(row) })
+    .then(()=>setSaveStatus('ok')).catch(()=>setSaveStatus('err'));
 }
 
 function exportCsv(){
-  const head=['Client time','Name','Session','Turn','Decision date','Choice','Actual move','Correct','Rationale'];
+  const head=['Client time','Name','Session','Turn','Decision month','Choice','Actual move','Correct','Rationale'];
   const esc=x=>`"${String(x==null?'':x).replace(/"/g,'""')}"`;
   const body=allRows.map(r=>[r.clientTime,r.name,r.session,r.turn,r.date,r.choice,r.actual,r.correct,r.rationale].map(esc).join(','));
   const csv=[head.map(esc).join(',')].concat(body).join('\r\n');
@@ -449,7 +490,6 @@ function exportCsv(){
 
 /* ---------- chart ---------- */
 function buildChart(upToIdx, revealToIdx){
-  // dims
   const W=860,H=230, mL=34,mR=14,mT=12,mB=24;
   const iw=W-mL-mR, ih=H-mT-mB;
   const n=SERIES.length;
@@ -458,29 +498,22 @@ function buildChart(upToIdx, revealToIdx){
   const y=v=> mT + ih*(1-(v-vmin)/(vmax-vmin));
   const shown = revealToIdx!=null ? revealToIdx : upToIdx;
 
-  // gridlines
   let grid="";
   [96,100,104,108].forEach(gv=>{
     const yy=y(gv).toFixed(1);
     grid+=`<line x1="${mL}" x2="${W-mR}" y1="${yy}" y2="${yy}" stroke="var(--grid)" stroke-width="1"/>`;
     grid+=`<text x="${mL-6}" y="${(+yy+3).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${gv}</text>`;
   });
-  // x labels every 3 months
   let xlab="";
   for(let i=1;i<n;i+=3){
     xlab+=`<text x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9.5" fill="var(--muted)">${SERIES[i].m}</text>`;
   }
-
-  // known path (solid) up to upToIdx
   let dKnown="";
   for(let i=0;i<=upToIdx;i++){ dKnown+=(i?"L":"M")+x(i).toFixed(1)+" "+y(SERIES[i].v).toFixed(1)+" "; }
-  // revealed extension
   let dRev="";
   if(revealToIdx!=null){
     for(let i=upToIdx;i<=revealToIdx;i++){ dRev+=(i===upToIdx?"M":"L")+x(i).toFixed(1)+" "+y(SERIES[i].v).toFixed(1)+" "; }
   }
-
-  // dots + hover targets for shown range
   let dots="", hit="";
   for(let i=0;i<=shown;i++){
     const isEnd = i===shown;
@@ -489,11 +522,10 @@ function buildChart(upToIdx, revealToIdx){
     dots+=`<circle cx="${x(i).toFixed(1)}" cy="${y(SERIES[i].v).toFixed(1)}" r="${r}" fill="${fill}" stroke="var(--surface)" stroke-width="1.5"/>`;
     hit+=`<circle cx="${x(i).toFixed(1)}" cy="${y(SERIES[i].v).toFixed(1)}" r="12" fill="transparent" data-m="${SERIES[i].m}" data-v="${SERIES[i].v}" class="hitpt"/>`;
   }
-
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="U.S. Dollar Index over time">
     ${grid}${xlab}
     <path d="${dKnown}" fill="none" stroke="var(--series)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-    ${dRev?`<path d="${dRev}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="1 0" stroke-linejoin="round" stroke-linecap="round"/>`:""}
+    ${dRev?`<path d="${dRev}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`:""}
     ${dots}${hit}
   </svg>`;
 }
@@ -511,19 +543,18 @@ function wireChartHover(root){
 /* ---------- render a turn ---------- */
 function render(){
   view='game';
-  // rail
   const rail=document.getElementById('rail'); rail.innerHTML='';
-  TURNS.forEach((_,i)=>{
+  ACTIVE.forEach((_,i)=>{
     const d=document.createElement('div');
     d.className='pip'+(i<cur||answers[i]?' done':'')+(i===cur?' cur':'');
     rail.appendChild(d);
   });
-  const done = answers.filter(Boolean).length;
+  const done = answers.filter(a=>a&&a.correct!==null).length;
   const right = answers.filter(a=>a&&a.correct===true).length;
-  document.getElementById('railLeft').textContent=`Turn ${cur+1} of ${TURNS.length}`;
+  const t=ACTIVE[cur];
+  document.getElementById('railLeft').textContent=`Turn ${cur+1} of ${ACTIVE.length}  ·  ${t.date}`;
   document.getElementById('railRight').textContent=`Correct calls: ${right} / ${done}`;
 
-  const t=TURNS[cur];
   const prior=answers[cur];
   const mount=document.getElementById('turnMount');
   mount.innerHTML=`
@@ -533,7 +564,7 @@ function render(){
         <span class="phase">${t.phase}</span>
       </div>
       <div class="statrow">
-        <div class="stat"><div class="k">DXY now</div><div class="v">${t.level}</div></div>
+        <div class="stat"><div class="k">DXY now (${SERIES[t.knownIdx].m} close)</div><div class="v">${fmt(SERIES[t.knownIdx].v)}</div></div>
       </div>
       <div class="know">
         <h3>What you know right now</h3>
@@ -548,17 +579,16 @@ function render(){
         <h3>Your call</h3>
         <p class="qhint">${t.horizon}</p>
         <div class="choices" id="choices">
-          <button class="choice up" data-c="UP"><span class="big"><span class="arrow">▲</span> Long the dollar</span><span class="desc">DXY rises</span></button>
-          <button class="choice down" data-c="DOWN"><span class="big"><span class="arrow">▼</span> Short the dollar</span><span class="desc">DXY falls</span></button>
+          <button class="choice up" data-c="UP"><span class="big"><span class="arrow">▲</span> Buy dollar</span><span class="desc">expect DXY to rise</span></button>
+          <button class="choice down" data-c="DOWN"><span class="big"><span class="arrow">▼</span> Sell dollar</span><span class="desc">expect DXY to fall</span></button>
           <button class="choice flat" data-c="FLAT"><span class="big"><span class="arrow">■</span> Stay flat</span><span class="desc">roughly unchanged / hedge</span></button>
         </div>
         <div class="why">
-          <label for="rat">Your reasoning (name the model — UIP, monetary approach, BOP, risk premium…). This is what earns credit.</label>
-          <textarea id="rat" placeholder="e.g. Fed on hold vs. ECB cutting → wider rate gap → by UIP the dollar should…"></textarea>
+          <label for="rat">Your reasoning (name the model — interest parity, monetary approach, balance of payments, risk premium…). This is what earns credit.</label>
+          <textarea id="rat" placeholder="e.g. Fed on hold vs. ECB cutting → wider rate gap → by interest parity the dollar should…"></textarea>
         </div>
         <div class="actions">
           <button class="primary" id="revealBtn" disabled>Lock in &amp; reveal</button>
-          <span class="scoretag" id="scoretag"></span>
         </div>
       </div>
 
@@ -581,45 +611,43 @@ function render(){
     selectChoice(prior.choice);
     choiceBtns.forEach(b=>b.disabled=true);
     revealBtn.disabled=true; revealBtn.textContent='Revealed';
-    showReveal(t, prior.choice, false);
+    showReveal(t, prior.choice);
   }
 
   revealBtn.addEventListener('click',()=>{
     if(!choice) return;
-    const actual=t.dir!==undefined?t.dir:(SERIES[t.outIdx].v>SERIES[t.knownIdx].v?'UP':'DOWN');
-    const correct = (choice==='UP'&&actual==='UP')||(choice==='DOWN'&&actual==='DOWN');
-    answers[cur]={choice, correct: choice==='FLAT'?null:correct};
+    const mv=moveOf(t);
+    const correct = (choice==='UP'&&mv.dir==='UP')||(choice==='DOWN'&&mv.dir==='DOWN');
+    answers[cur]={choice, correct: (mv.flat||choice==='FLAT')?null:correct};
     const rationale=(mount.querySelector('#rat')?.value||'').trim();
-    logResponse({ clientTime:new Date().toISOString(), name:player.name,
-      session:player.session, turn:cur+1, date:t.date, choice,
-      actual, correct: choice==='FLAT'?'flat':(correct?'yes':'no'), rationale });
+    logResponse({ clientTime:new Date().toISOString(), name:player.name, session:player.session,
+      turn:t.date+' (#'+(cur+1)+')', date:t.date, choice,
+      actual: mv.flat?'flat':mv.dir, correct: mv.flat?'flat-month':(choice==='FLAT'?'flat':(correct?'yes':'no')),
+      rationale });
     choiceBtns.forEach(b=>b.disabled=true);
     revealBtn.disabled=true; revealBtn.textContent='Revealed';
-    // redraw chart with reveal
     document.getElementById('chartFig').innerHTML =
       buildChart(t.knownIdx, t.outIdx)+
       `<figcaption class="cap">U.S. Dollar Index (DXY), approx. month-end. Orange = what happened next.</figcaption>`;
     wireChartHover(document.getElementById('chartFig'));
-    showReveal(t, choice, true);
-    render(); // refresh rail/score — but keep reveal open
+    showReveal(t, choice);
+    render();
   });
 }
 
-function showReveal(t, choice, animate){
-  const startV=SERIES[t.knownIdx].v, endV=SERIES[t.outIdx].v;
-  const actual = endV>startV?'UP':'DOWN';
-  const pct=((endV-startV)/startV*100);
-  const pctTxt=(pct>=0?'+':'')+pct.toFixed(1)+'%';
-  const correct=(choice==='UP'&&actual==='UP')||(choice==='DOWN'&&actual==='DOWN');
-  let badge;
-  if(choice==='FLAT') badge=`<span class="badge flat">◆ You hedged</span>`;
-  else badge = correct?`<span class="badge hit">✓ Correct call</span>`:`<span class="badge miss">✗ Missed</span>`;
-  const dirWord = actual==='UP'?'strengthened':'weakened';
-  const dirInk = actual==='UP'?'up-ink':'down-ink';
+function showReveal(t, choice){
+  const mv=moveOf(t);
+  const pctTxt=(mv.pct>=0?'+':'')+mv.pct.toFixed(1)+'%';
+  const correct=(choice==='UP'&&mv.dir==='UP')||(choice==='DOWN'&&mv.dir==='DOWN');
+  let badge, dirWord, dirInk;
+  if(mv.flat){ badge=`<span class="badge flat">≈ Flat month (not scored)</span>`; dirWord='was basically flat'; dirInk='flat-ink'; }
+  else if(choice==='FLAT'){ badge=`<span class="badge flat">◆ You hedged</span>`; dirWord=mv.dir==='UP'?'strengthened':'weakened'; dirInk=mv.dir==='UP'?'up-ink':'down-ink'; }
+  else { badge = correct?`<span class="badge hit">✓ Correct call</span>`:`<span class="badge miss">✗ Missed</span>`;
+         dirWord=mv.dir==='UP'?'strengthened':'weakened'; dirInk=mv.dir==='UP'?'up-ink':'down-ink'; }
   const rev=document.getElementById('reveal');
   rev.innerHTML=`
     <div class="verdict">${badge}
-      <span>The dollar ${dirWord}: <span class="movenum ${dirInk}">${t.level} → ${endV.toFixed(1)} (${pctTxt})</span></span>
+      <span>The dollar ${dirWord}: <span class="movenum ${dirInk}">${fmt(mv.s)} → ${fmt(mv.e)} (${pctTxt})</span></span>
     </div>
     <div class="lens">
       <div class="tag">Model lens · ${t.tag}</div>
@@ -629,7 +657,7 @@ function showReveal(t, choice, animate){
       <div class="body"><ul>${t.teach.map(x=>`<li>${x}</li>`).join('')}</ul></div>
     </details>
     <div class="nav">
-      ${cur<TURNS.length-1
+      ${cur<ACTIVE.length-1
         ? `<button class="primary" id="nextBtn">Next turn →</button>`
         : `<button class="primary" id="finishBtn">See the big picture →</button>`}
     </div>
@@ -645,33 +673,46 @@ function renderEnd(){
   const done=answers.filter(a=>a&&a.correct!==null).length;
   const right=answers.filter(a=>a&&a.correct===true).length;
   const mount=document.getElementById('turnMount');
-  document.getElementById('rail').innerHTML=TURNS.map(()=>'<div class="pip done"></div>').join('');
+  document.getElementById('rail').innerHTML=ACTIVE.map(()=>'<div class="pip done"></div>').join('');
   document.getElementById('railLeft').textContent='Complete';
   document.getElementById('railRight').textContent=`Correct calls: ${right} / ${done}`;
-  const rows=TURNS.map((t,i)=>{
-    const s=SERIES[t.knownIdx].v, e=SERIES[t.outIdx].v, p=((e-s)/s*100);
-    const dir=e>s?'▲':'▼'; const ink=e>s?'up-ink':'down-ink';
+
+  // range covered by the active turns
+  const lo=Math.min(...ACTIVE.map(t=>t.knownIdx));
+  const hi=Math.max(...ACTIVE.map(t=>t.outIdx));
+  let mn=Infinity,mx=-Infinity,mnL='',mxL='';
+  for(let i=lo;i<=hi;i++){ if(SERIES[i].v<mn){mn=SERIES[i].v;mnL=SERIES[i].m;} if(SERIES[i].v>mx){mx=SERIES[i].v;mxL=SERIES[i].m;} }
+  const net=((SERIES[hi].v-SERIES[lo].v)/SERIES[lo].v*100);
+
+  const rows=ACTIVE.map((t,i)=>{
+    const mv=moveOf(t);
+    const dir=mv.flat?'≈':(mv.dir==='UP'?'▲':'▼'); const ink=mv.flat?'flat-ink':(mv.dir==='UP'?'up-ink':'down-ink');
     const a=answers[i];
-    const mark=!a?'—':a.choice==='FLAT'?'◆ flat':(a.correct?'✓':'✗');
-    return `<tr><td>${i+1}</td><td>${t.date}</td><td class="dir ${ink}">${dir} ${(p>=0?'+':'')+p.toFixed(1)}%</td><td>${mark}</td><td>${t.tag}</td></tr>`;
+    const mark=!a?'—':a.correct===null?'≈':(a.correct?'✓':'✗');
+    return `<tr><td>${i+1}</td><td>${t.date}</td><td class="dir ${ink}">${dir} ${(mv.pct>=0?'+':'')+mv.pct.toFixed(1)}%</td><td>${mark}</td><td>${t.tag}</td></tr>`;
   }).join('');
+
+  const capstone = (PART_ON[2]||PART_ON[3])
+    ? `Across these months the dollar was driven by <strong>asset markets and expectations</strong> — relative interest-rate paths, surprises vs. what was priced, and crowded positioning — and finally by a collapse in policy <em>confidence</em>. In 2025 a policy meant to shrink the trade deficit (tariffs) sent the dollar to its worst year since 1973, because the <strong>capital account</strong> — where global investors choose to park their money — moved far more than the trade account. Exchange rates are set where the world decides whether to hold your assets.`
+    : `In these months the dollar tracked <strong>relative interest-rate expectations</strong>: it rose when hot data pushed Fed cuts out (a higher expected path) and fell when cooling data or a narrowing rate gap pulled easing forward. The dramatic August drop shows the same logic in reverse — a carry trade unwinding as the U.S.–Japan gap closed. Watch how each new data point <em>reprices the path</em>, and the direction usually follows.`;
+
   mount.innerHTML=`
     <div class="card">
-      <div class="turnhead"><h2>The big picture — 24 months of the dollar</h2><span class="phase">Debrief</span></div>
-      <figure class="chart" id="endchart">${buildChart(SERIES.length-1,null)}
-        <figcaption class="cap">The full DXY path, Dec 2023 → Dec 2025. Hover any point.</figcaption></figure>
+      <div class="turnhead"><h2>The big picture — your run</h2><span class="phase">Debrief</span></div>
+      <figure class="chart" id="endchart">${buildChart(hi,null)}
+        <figcaption class="cap">The DXY path you played, ${SERIES[lo].m} → ${SERIES[hi].m}. Hover any point.</figcaption></figure>
       <div class="endgrid">
         <div class="kpi"><div class="n">${right}/${done}</div><div class="l">Your direction calls</div></div>
-        <div class="kpi"><div class="n up-ink">108.5</div><div class="l">2024 high (Dec)</div></div>
-        <div class="kpi"><div class="n down-ink">96.5</div><div class="l">2025 low (Sep)</div></div>
-        <div class="kpi"><div class="n down-ink">−10%</div><div class="l">2025 full-year</div></div>
+        <div class="kpi"><div class="n up-ink">${fmt(mx)}</div><div class="l">High · ${mxL}</div></div>
+        <div class="kpi"><div class="n down-ink">${fmt(mn)}</div><div class="l">Low · ${mnL}</div></div>
+        <div class="kpi"><div class="n ${net>=0?'up-ink':'down-ink'}">${(net>=0?'+':'')+net.toFixed(1)}%</div><div class="l">Net over run</div></div>
       </div>
       <div class="lens">
         <div class="tag">The one thing to remember</div>
-        <p>For two years the dollar was driven by <strong>asset markets and expectations</strong> — relative interest-rate paths, surprises vs. what was priced, crowded positioning, and finally a collapse in policy <em>confidence</em>. In 2025 a policy meant to shrink the trade deficit (tariffs) sent the dollar to its worst year since 1973, because the <strong>capital account</strong> — where global investors choose to park their money — moved far more than the trade account. Exchange rates are set where the world decides whether to hold your assets.</p>
+        <p>${capstone}</p>
       </div>
       <table class="summary">
-        <thead><tr><th>#</th><th>Decision point</th><th>Actual move</th><th>You</th><th>Concept</th></tr></thead>
+        <thead><tr><th>#</th><th>Month</th><th>Actual move</th><th>You</th><th>Concept</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
       <div class="nav" style="gap:10px">
@@ -690,17 +731,25 @@ function renderEnd(){
 function renderGate(){
   view='gate';
   document.getElementById('rail').innerHTML='';
-  document.getElementById('railLeft').textContent='Sign in to begin';
   document.getElementById('railRight').textContent='';
   setSaveStatus(SHEET_ENDPOINT?null:'local');
+  if(ACTIVE.length===0){
+    document.getElementById('railLeft').textContent='No parts enabled';
+    document.getElementById('turnMount').innerHTML=`
+      <div class="card"><div class="turnhead"><h2>All three parts are turned off</h2></div>
+      <p class="qhint" style="margin-top:12px">Set <code>PART_1</code>, <code>PART_2</code>, or <code>PART_3</code> to <code>1</code> near the top of this file's script to release a batch of turns.</p></div>`;
+    return;
+  }
+  document.getElementById('railLeft').textContent='Sign in to begin';
+  const partsList = [PART_ON[1]&&'Part 1', PART_ON[2]&&'Part 2', PART_ON[3]&&'Part 3'].filter(Boolean).join(' + ');
   document.getElementById('turnMount').innerHTML=`
     <div class="card">
-      <div class="turnhead"><h2>Before you start</h2><span class="phase">Sign in</span></div>
-      <p class="qhint" style="margin-top:12px">Enter your name to begin. Each Long / Short / Flat call and your reasoning are recorded for participation credit.</p>
+      <div class="turnhead"><h2>Before you start</h2><span class="phase">${partsList} · ${ACTIVE.length} turns</span></div>
+      <p class="qhint" style="margin-top:12px">Enter your name to begin. Each Buy / Sell / Flat call and your reasoning are recorded for participation credit.</p>
       <div class="why"><label for="gName">Full name</label><input id="gName" class="ginput" autocomplete="off" placeholder="Jane Tribe"></div>
       <div class="actions">
         <button class="primary" id="startBtn" disabled>Start the game →</button>
-        <span class="scoretag">${SHEET_ENDPOINT?'Responses save automatically.':'No sheet connected — responses stay on this device (see Instructor guide).'}</span>
+        <span class="scoretag">${SHEET_ENDPOINT?'Responses save automatically.':'No sheet connected — responses stay on this device (see Instructions).'}</span>
       </div>
     </div>`;
   const n=document.getElementById('gName'), b=document.getElementById('startBtn');
@@ -725,7 +774,7 @@ themeBtn.addEventListener('click',()=>{
   const dark=document.documentElement.getAttribute('data-theme')==='dark';
   document.documentElement.setAttribute('data-theme',dark?'light':'dark');
   themeBtn.textContent=dark?'Dark':'Light';
-  redrawView(); // recolor svg + preserve current screen
+  redrawView();
 });
 
 renderGate();
